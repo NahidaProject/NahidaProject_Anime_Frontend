@@ -8,9 +8,10 @@
                 <div class="user_access_b">
                     <div class="user_ip">{{ userip }}</div>
                     -
-                    <div class="user_accesstime">{{ `${new Date().getHours()}:${new Date().getMinutes() > 10 ? new
-                            Date().getMinutes() : '0' + new Date().getMinutes()}:${new Date().getSeconds() > 10 ? new
-                                Date().getSeconds() : '0' + new Date().getSeconds()}`
+                    <div class="user_accesstime">{{ `${new Date().getHours() > 10 ? new Date().getHours() : '0' + new
+                            Date().getHours()}:${new Date().getMinutes() > 10 ? new
+                                Date().getMinutes() : '0' + new Date().getMinutes()}:${new Date().getSeconds() > 10 ? new
+                                    Date().getSeconds() : '0' + new Date().getSeconds()}`
                     }}</div>
                 </div>
                 <div class="select selected">首页</div>
@@ -19,34 +20,18 @@
                 <div class="jump">
                     <div class="jump_title">跳转</div>
                     <hr>
-                    <div class="item"><a href="#item1">推荐</a></div>
-                    <div class="item"><a href="#item2">番剧</a></div>
-                    <div class="item"><a href="#item3">论坛</a></div>
-                    <div class="item"><a href="#item4">排行</a></div>
-                    <div class="item"><a href="#item5">漫画</a></div>
-                    <div class="item"><a href="#item6">搜索</a></div>
+                    <div class="item" v-for="(item, index) in jump_title" :key="index">
+                        <a :href="'#item' + (index + 1)">{{ item.title }}</a>
+                    </div>
                 </div>
             </div>
             <div class="content_right">
                 <div class="banner"></div>
-                <article class="i_banner" id="item1">
-                    <h2>推荐</h2>
-                </article>
-                <article class="i_banner" id="item2">
-                    <h2>番剧</h2>
-                </article>
-                <article class="i_banner" id="item3">
-                    <h2>论坛</h2>
-                </article>
-                <article class="i_banner" id="item4">
-                    <h2>排行</h2>
-                </article>
-                <article class="i_banner" id="item5">
-                    <h2>漫画</h2>
-                </article>
-                <article class="i_banner" id="item6">
-                    <h2>搜索</h2>
-                </article>
+                <div :id='"item" + (index + 1)' v-for="(item, index) in jump_title" :key="index">
+                    <article class="i_banner">
+                        <h2>{{ item.title }}</h2>
+                    </article>
+                </div>
             </div>
         </div>
     </div>
@@ -54,15 +39,39 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const userip = ref('')
+
+const jump_title = [{ title: '推荐' }, { title: '番剧' }, { title: '论坛' }, { title: '排行' }, { title: '漫画' }, { title: '搜索' }]
 
 axios.defaults.baseURL = '/getip'
 axios.get('/').then(res => {
     const sohodata = res.data.split('=')[1]
     userip.value = JSON.parse(sohodata.substr(0, sohodata.length - 1)).cip
 })
+
+onMounted(() => {
+    const h2 = document.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>
+    const item = document.querySelectorAll('.item') as NodeListOf<HTMLButtonElement>
+    h2.forEach(ele => {
+        ele.addEventListener('mouseenter', (e) => {
+            const h2b = e.target as HTMLElement
+            h2b.classList.add("h2after")
+        })
+        ele.addEventListener('mouseleave', (e) => {
+            const h2b = e.target as HTMLElement
+            h2b.classList.remove('h2after')
+        })
+    })
+    item.forEach(ele => {
+        ele.addEventListener('click', (e) => {
+            // TODO: Set animate transition while click the anchor
+        })
+    })
+})
+
+
 </script>
 
 <style scoped lang="less">
@@ -150,11 +159,16 @@ axios.get('/').then(res => {
             .item {
                 transition: ease .3s;
                 text-shadow: white 0 0 10px;
-            }
+                display: flex;
+                width: fit-content;
+                position: relative;
+                left: 100%;
+                transform: translateX(-100%);
 
-            .item a {
-                text-decoration: none;
-                color: black;
+                a {
+                    text-decoration: none;
+                    color: black;
+                }
             }
 
             .item:hover {
@@ -189,15 +203,49 @@ axios.get('/').then(res => {
             .i_banner {
                 color: #444;
                 font-family: microsoft yahei;
-                margin: 0 20px;
-            }
+                margin: 25px 20px;
 
-            .i_banner::after {
-                position: absolute;
-                width: 30px;
-                height: 3px;
-                background: linear-gradient(to bottom right, #82f53c, #3db127);
-                content: '';
+                h2 {
+                    font-size: 1.2em;
+                    position: relative;
+                    padding-bottom: 10px;
+                    font-weight: 600;
+                }
+
+                h2::before {
+                    content: '';
+                    width: 75%;
+                    padding: 0 25px;
+                    border-bottom: 1px solid #eee;
+                    position: absolute;
+                    bottom: -1px;
+                }
+
+                h2::after {
+                    transition: all .35s ease-out;
+                    content: "";
+                    position: absolute;
+                    background: linear-gradient(to bottom right, #82f53c, #3db127);
+                    width: 1em;
+                    height: 5px;
+                    border-radius: 6px;
+                    box-shadow: 0 2px 12px #3db127;
+                    bottom: -3px;
+                    left: 0;
+                }
+
+                .h2after::after {
+                    transition: all .35s ease-out;
+                    content: "";
+                    position: absolute;
+                    background: linear-gradient(to bottom right, #82f53c, #3db127);
+                    width: 2em;
+                    height: 5px;
+                    border-radius: 6px;
+                    box-shadow: 0 2px 12px #3db127;
+                    bottom: -3px;
+                    left: 0;
+                }
             }
         }
     }
