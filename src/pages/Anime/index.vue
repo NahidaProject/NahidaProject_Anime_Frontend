@@ -77,6 +77,7 @@ axios.get('/').then(res => {
         background-image: url(http://www.cilicili.cc/api/images/bg);
         background-size: cover;
         filter: blur(15px);
+        opacity: .2;
         z-index: -10;
         width: 100vw;
         height: 100vh;
