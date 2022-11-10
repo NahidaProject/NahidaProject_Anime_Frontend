@@ -8,11 +8,7 @@
                 <div class="user_access_b">
                     <div class="user_ip">{{ userip }}</div>
                     -
-                    <div class="user_accesstime">{{ `${new Date().getHours() > 10 ? new Date().getHours() : '0' + new
-                            Date().getHours()}:${new Date().getMinutes() > 10 ? new
-                                Date().getMinutes() : '0' + new Date().getMinutes()}:${new Date().getSeconds() > 10 ? new
-                                    Date().getSeconds() : '0' + new Date().getSeconds()}`
-                    }}</div>
+                    <div class="user_accesstime">{{ new Date().toString().split(' ')[4] }}</div>
                 </div>
                 <div class="select selected">首页</div>
                 <div class="select">留言</div>
