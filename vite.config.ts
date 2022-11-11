@@ -11,5 +11,8 @@ export default defineConfig({
         changeOrigin:true
       }
     }
+  },
+  resolve:{
+    dedupe:['vue']
   }
 })
