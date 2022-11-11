@@ -4,7 +4,7 @@ import Anime from '../pages/Anime/index.vue'
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        component: () => Anime,
+        component: Anime,
         meta: {
             title: '欢迎来到Nahida Anime'
         }
