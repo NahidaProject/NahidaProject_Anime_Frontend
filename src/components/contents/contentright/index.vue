@@ -5,14 +5,28 @@
             <article class="i_banner">
                 <h2>{{ item.title }}</h2>
             </article>
+            <template v-if="item.title == '推荐'">
+                <Recommend></Recommend>
+            </template>
+            <template v-else-if="item.title == '番剧'">
+                <Anime></Anime>
+            </template>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import Recommend from '../../recommend/index.vue'
+import Anime from '../../anime/index.vue'
 
-const jump_title = [{ title: '推荐' }, { title: '番剧' }, { title: '论坛' }, { title: '排行' }, { title: '漫画' }, { title: '搜索' }]
+const jump_title = [
+    { title: '推荐' },
+    { title: '番剧' },
+    { title: '论坛' },
+    { title: '排行' },
+    { title: '漫画' },
+    { title: '搜索' }]
 
 onMounted(() => {
     const h2 = document.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>

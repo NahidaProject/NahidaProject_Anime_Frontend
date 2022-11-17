@@ -10,35 +10,18 @@
         <div class="select selected">首页</div>
         <div class="select">留言</div>
         <div class="select">社区</div>
-        <div class="jump">
-            <div class="jump_title">跳转</div>
-            <hr>
-            <div class="item" v-for="(item, index) in jump_title" :key="index">
-                <a :href="'#item' + (index + 1)">{{ item.title }}</a>
-            </div>
-        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
-const jump_title = [{ title: '推荐' }, { title: '番剧' }, { title: '论坛' }, { title: '排行' }, { title: '漫画' }, { title: '搜索' }]
+import { ref } from 'vue'
 const userip = ref('')
 
 axios.defaults.baseURL = '/getip'
 axios.get('/').then(res => {
     const sohodata = res.data.split('=')[1]
     userip.value = JSON.parse(sohodata.substr(0, sohodata.length - 1)).cip
-})
-
-onMounted(() => {
-    const item = document.querySelectorAll('.item') as NodeListOf<HTMLButtonElement>
-    item.forEach(ele => {
-        ele.addEventListener('click', (e) => {
-            // TODO: Set animate transition while click the anchor
-        })
-    })
 })
 </script>
 
