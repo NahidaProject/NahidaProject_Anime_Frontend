@@ -35,6 +35,8 @@ const vList = ref<number>()
 
 let vdo: HTMLVideoElement
 
+let volumetmp = 0.1
+
 fetch(`http://localhost:1314/api/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
     vList.value = a['a_set']
 })
@@ -90,12 +92,12 @@ window.onkeydown = (e) => {
             break;
         case "ArrowUp":
             {
-                console.log('上');
+                vdo.volume !== 1 ? vdo.volume += volumetmp : 1;
             }
             break;
         case "ArrowDown":
             {
-                console.log('下');
+                vdo.volume !== 0 ? vdo.volume -= volumetmp : 1;
             }
             break;
         default: ; break;
