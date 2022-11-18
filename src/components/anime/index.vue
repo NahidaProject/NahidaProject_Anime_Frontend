@@ -10,7 +10,7 @@
             <div>
                 {{ item["a_name"] }}
             </div>
-            <div>
+            <div :style="{'color':`${item['a_stats']=='已完结'?'green':'red'}`}">
                 {{ item["a_stats"] }}
             </div>
         </div>
@@ -40,6 +40,7 @@ onUpdated(() => {
     padding: 0 20px 0 30px;
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
 }
 
 .cover {
@@ -55,6 +56,7 @@ onUpdated(() => {
     user-select: none;
     display: flex;
     flex-direction: column;
+    width: 160px;
 }
 
 .tilt {
