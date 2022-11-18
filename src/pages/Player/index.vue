@@ -66,6 +66,41 @@ onUnmounted(() => {
         myPlayer.value.dispose()
     }
 })
+
+window.onkeydown = (e) => {
+    switch (e.key) {
+        case ' ':
+            {
+                if (vdo.paused) {
+                    vdo.play()
+                } else {
+                    vdo.pause()
+                }
+            }
+            break;
+        case "ArrowLeft":
+            {
+                vdo.currentTime = vdo.currentTime - 5
+            }
+            break;
+        case "ArrowRight":
+            {
+                vdo.currentTime = vdo.currentTime + 5
+            }
+            break;
+        case "ArrowUp":
+            {
+                console.log('上');
+            }
+            break;
+        case "ArrowDown":
+            {
+                console.log('下');
+            }
+            break;
+        default: ; break;
+    }
+}
 </script>
 
 <style scoped lang="less">
@@ -136,7 +171,8 @@ onUnmounted(() => {
                     align-items: center;
                     justify-content: center;
                     cursor: pointer;
-                    a{
+
+                    a {
                         color: black;
                         text-decoration: none;
                     }
