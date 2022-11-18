@@ -6,7 +6,17 @@
                 <div class="index">
                     <RouterLink to="/"><span>主页</span></RouterLink>
                 </div>
-                <video width="800" height="500" ref="videoPlayer" class="video-js"></video>
+                <div class="main">
+                    <video width="800" height="500" ref="videoPlayer" class="video-js"></video>
+                    <div class="introduce">
+                        <div class="a_name">{{ thisanime['a_name'] }}</div>
+                        <div class="a_lang">语言: {{ thisanime['a_lang'] }}</div>
+                        <div class="a_cv">CV: {{ thisanime['a_cv'] }}</div>
+                        <div class="a_releace_date">上映日期: {{ thisanime['a_release_date'] }}</div>
+                        <div class="a_company">出品公司: {{ thisanime['a_company'] }}</div>
+                        <div class="a_desc">背景:<br/> {{ thisanime['a_desc'] }}</div>
+                    </div>
+                </div>
                 <ul class="list">
                     <li v-for="(item, index) in vList" @click="reloadvideo(index + 1)">
                         <RouterLink
@@ -33,11 +43,21 @@ const myPlayer = ref()
 
 const vList = ref<number>()
 
+const thisanime = ref({
+    a_name: '',
+    a_lang: '',
+    a_cv: '',
+    a_release_date: '',
+    a_company: '',
+    a_desc: ''
+})
+
 let vdo: HTMLVideoElement
 
 let volumetmp = 0.1
 
 fetch(`http://localhost:1314/api/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
+    thisanime.value = a
     vList.value = a['a_set']
 })
 
@@ -100,7 +120,8 @@ window.onkeydown = (e) => {
                 vdo.volume !== 0 ? vdo.volume -= volumetmp : 1;
             }
             break;
-        default: ; break;
+        default:
+            break;
     }
 }
 </script>
@@ -133,6 +154,36 @@ window.onkeydown = (e) => {
             flex-direction: column;
             user-select: none;
 
+            .main {
+                display: flex;
+                margin: 5% auto;
+                border: 20px rgba(134, 134, 134, 0.425) solid;
+                border-radius: 20px;
+
+                .video-js {
+                    height: 450px;
+                }
+
+                .introduce {
+                    height: 450px;
+                    width: 300px;
+                    overflow-y: scroll;
+                    background-color: rgba(189, 189, 189, 0.459);
+                    line-height: 40px;
+                    .a_name{
+                        font-weight: 600;
+                        font-size: 30px;
+                    }
+                    .a_cv{
+                        line-height: normal;
+                    }
+                    .a_desc{
+                        line-height: normal;
+                    }
+                }
+
+            }
+
             .index {
                 width: fit-content;
                 position: absolute;
@@ -149,11 +200,6 @@ window.onkeydown = (e) => {
                 }
             }
 
-            .video-js {
-                height: 450px;
-                margin: 5%;
-                margin: 5% auto;
-            }
 
             .list {
                 display: flex;

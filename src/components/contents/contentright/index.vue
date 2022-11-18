@@ -23,10 +23,11 @@ import Anime from '../../anime/index.vue'
 const jump_title = [
     { title: '推荐' },
     { title: '番剧' },
-    { title: '论坛' },
-    { title: '排行' },
-    { title: '漫画' },
-    { title: '搜索' }]
+    // { title: '论坛' },
+    // { title: '排行' },
+    // { title: '漫画' },
+    // { title: '搜索' }
+]
 
 onMounted(() => {
     const h2 = document.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>

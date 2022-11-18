@@ -8,8 +8,8 @@
             <div class="user_accesstime">{{ new Date().toString().split(' ')[4] }}</div>
         </div>
         <div class="select selected">首页</div>
-        <div class="select">留言</div>
-        <div class="select">社区</div>
+        <!-- <div class="select">留言</div>
+        <div class="select">社区</div> -->
     </div>
 </template>
 
