@@ -3,14 +3,14 @@
         <div class="animecard" v-for="(item, index) in animeList">
             <div class="tilt" data-tilt
                 :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
-                <RouterLink :to="{ path: '/play', query: { a_id: item['a_id'],a_id_num: '001' } }">
+                <RouterLink :to="{ path: '/play', query: { a_id: item['a_id'], a_id_num: '001' } }">
                     <div class="cover"></div>
                 </RouterLink>
             </div>
             <div>
                 {{ item["a_name"] }}
             </div>
-            <div :style="{'color':`${item['a_stats']=='已完结'?'green':'red'}`}">
+            <div :style="{ 'color': `${item['a_stats'] == '已完结' ? 'green' : 'red'}` }">
                 {{ item["a_stats"] }}
             </div>
         </div>
@@ -18,13 +18,29 @@
 </template>
 
 <script setup lang="ts">
-import VanillaTilt from 'vanilla-tilt';
-import { onUpdated, ref } from 'vue';
-const animeList = ref([])
+import { onUpdated, ref } from 'vue'
+import VanillaTilt from 'vanilla-tilt'
+
+interface animedata {
+    a_stats: string,
+    a_id: number,
+    a_name: string,
+}
+
+const animeList = ref(<{}>[])  
+
 fetch('http://localhost:1314/api/getAllAnime')
     .then(data => data.json())
     .then(anime => {
-        animeList.value = anime
+        let a: animedata[] = [], b: animedata[] = []
+        anime.forEach((e: animedata) => {
+            if (e.a_stats == '连载中') {
+                a.push(e)
+            } else {
+                b.push(e)
+            }
+        });
+        animeList.value = a.concat(b)
     })
 
 onUpdated(() => {
@@ -57,6 +73,7 @@ onUpdated(() => {
     display: flex;
     flex-direction: column;
     width: 160px;
+    margin: 10px;
 }
 
 .tilt {
