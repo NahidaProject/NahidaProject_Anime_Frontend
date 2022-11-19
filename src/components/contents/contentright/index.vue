@@ -1,6 +1,11 @@
 <template>
     <div class="content_right">
-        <div class="banner"></div>
+        <div class="banner">
+            <div class="yiyan">
+                <span>{{ yiyan }}</span>
+                <span>--{{ fromwhere }}</span>
+            </div>
+        </div>
         <div :id='"item" + (index + 1)' v-for="(item, index) in jump_title" :key="index">
             <article class="i_banner">
                 <h2>{{ item.title }}</h2>
@@ -16,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import Recommend from '../../recommend/index.vue'
 import Anime from '../../anime/index.vue'
 
@@ -28,6 +33,14 @@ const jump_title = [
     // { title: '漫画' },
     // { title: '搜索' }
 ]
+
+const yiyan = ref<string>('')
+const fromwhere = ref<string>('')
+fetch('http://localhost:1314/api/yiyanrandom').then(res=>res.json()
+).then(y=>{
+    yiyan.value = y.yiyan
+    fromwhere.value = y.fromwhere
+})
 
 onMounted(() => {
     const h2 = document.querySelectorAll('h2') as NodeListOf<HTMLHeadingElement>
@@ -65,6 +78,19 @@ onMounted(() => {
         border-radius: 15px;
         border: 1px solid #eee;
         transition: opacity .4s ease-out;
+
+        .yiyan {
+            background-image: linear-gradient(to top, rgba(16, 16, 16, .35) 25%, rgba(16, 16, 16, 0) 100%);
+            color: white;
+            height: 8%;
+            position: relative;
+            top: 100%;
+            transform: translateY(-100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 0 15px 15px;
+        }
     }
 
     .i_banner {
