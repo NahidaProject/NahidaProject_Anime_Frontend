@@ -59,7 +59,6 @@ onMounted(() => {
 
 <style scoped lang="less">
 .content_right {
-    height: 4000px;
     width: 78%;
     min-width: 800px;
     background-color: white;
