@@ -2,7 +2,7 @@
     <div class="container">
         <div class="animecard" v-for="(item, index) in animeList">
             <div class="tilt" data-tilt
-                :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
+                :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/${item['a_id']}.png)` }">
                 <RouterLink :to="{ path: '/play', query: { a_id: item['a_id'], a_id_num: '001' } }">
                     <div class="cover"></div>
                 </RouterLink>
@@ -20,7 +20,8 @@
 <script setup lang="ts">
 import { onUpdated, ref } from 'vue'
 import VanillaTilt from 'vanilla-tilt'
-
+const domain = ref()
+const port = ref()
 interface animedata {
     a_stats: string,
     a_id: number,
@@ -29,7 +30,7 @@ interface animedata {
 
 const animeList = ref(<{}>[])  
 
-fetch('http://localhost:1314/api/getAllAnime')
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/getAllAnime`)
     .then(data => data.json())
     .then(anime => {
         let a: animedata[] = [], b: animedata[] = []
@@ -41,6 +42,8 @@ fetch('http://localhost:1314/api/getAllAnime')
             }
         });
         animeList.value = a.concat(b)
+        domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+        port.value = import.meta.env.VITE_BACKEND_PORT
     })
 
 onUpdated(() => {
@@ -79,7 +82,6 @@ onUpdated(() => {
 .tilt {
     width: 160px;
     height: 240px;
-    background-color: aqua;
     background-size: cover;
     background-position: center;
 }

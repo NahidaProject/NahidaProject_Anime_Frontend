@@ -9,7 +9,7 @@
                 slideShadows: true,
             }" :autoplay="{ delay: 3000 }">
             <swiper-slide class="card" v-for="(item, index) in animes"
-                :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + item['a_id'] + '.png)' }">
+                :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/${item['a_id']}.png)` }">
                 <div class="ms">
                     <div class="title">
                         {{ item['a_name'] }}
@@ -30,7 +30,8 @@ import { EffectCoverflow, Pagination, Autoplay } from "swiper"
 import "swiper/css"
 import "swiper/css/effect-coverflow"
 import "swiper/css/pagination"
-
+const domain = ref()
+const port = ref()
 const modules = [EffectCoverflow, Pagination, Autoplay]
 
 interface animedata {
@@ -39,7 +40,7 @@ interface animedata {
     a_recommend: boolean
 }
 let animes = ref(<{}>[])
-fetch('http://localhost:1314/api/getAllAnime')
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/getAllAnime`)
     .then(data => data.json())
     .then(anime => {
         let a: animedata[] = []
@@ -49,6 +50,8 @@ fetch('http://localhost:1314/api/getAllAnime')
             }
         });
         animes.value = a
+        domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+        port.value = import.meta.env.VITE_BACKEND_PORT
     })
 </script>
 
@@ -59,6 +62,7 @@ fetch('http://localhost:1314/api/getAllAnime')
     background-position: center;
     width: 300px;
     height: 400px;
+    user-select: none;
 }
 
 .ms {

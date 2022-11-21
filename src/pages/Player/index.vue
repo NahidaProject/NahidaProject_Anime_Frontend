@@ -52,26 +52,31 @@ const thisanime = ref({
     a_desc: ''
 })
 
+const domain = ref()
+const port = ref()
+
 let vdo: HTMLVideoElement
 
 let volumetmp = 0.1
 
-fetch(`http://localhost:1314/api/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
     thisanime.value = a
     vList.value = a['a_set']
 })
 
 const reloadvideo = (id: number) => {
-    vdo.src = `http://localhost:1314/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${id > 9 ? '0' + id : '00' + id}.mp4`
+    vdo.src = `http://${domain.value}:${port.value}/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${id > 9 ? '0' + id : '00' + id}.mp4`
 }
 
 onMounted(() => {
+    domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+    port.value = import.meta.env.VITE_BACKEND_PORT
     myPlayer.value = videojs(videoPlayer.value, {
-        poster: "http://localhost:1314/anime/videos/poster.jpeg",
+        poster: `http://${domain.value}:${port.value}/anime/videos/poster.jpeg`,
         controls: true,
         sources: [
             {
-                src: `http://localhost:1314/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${Route.query.a_id_num}.mp4`,
+                src: `http://${domain.value}:${port.value}/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${Route.query.a_id_num}.mp4`,
                 type: 'video/mp4',
             }
         ],
