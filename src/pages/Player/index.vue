@@ -20,7 +20,7 @@
                 <ul class="list">
                     <li v-for="(item, index) in vList" @click="reloadvideo(index + 1)">
                         <RouterLink
-                            :to="{ path: '/play', query: { a_id: Route.query.a_id, a_id_num: index + 1 > 10 ? '0' + (index + 1) : '00' + (index + 1) } }">
+                            :to="{ path: '/play', query: { a_id: Route.query.a_id, a_id_num: index + 1 > 9 ? '0' + (index + 1) : '00' + (index + 1) } }">
                             第{{ index + 1 }}集
                         </RouterLink>
                     </li>
@@ -62,7 +62,7 @@ fetch(`http://localhost:1314/api/getAnimeById/${Route.query.a_id}`).then(res => 
 })
 
 const reloadvideo = (id: number) => {
-    vdo.src = `http://localhost:1314/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${id > 10 ? '0' + id : '00' + id}.mp4`
+    vdo.src = `http://localhost:1314/anime/videos/${Route.query.a_id}/${Route.query.a_id}_${id > 9 ? '0' + id : '00' + id}.mp4`
 }
 
 onMounted(() => {
