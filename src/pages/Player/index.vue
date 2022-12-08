@@ -59,7 +59,7 @@ let vdo: HTMLVideoElement
 
 let volumetmp = 0.1
 
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
     thisanime.value = a
     vList.value = a['a_set']
 })

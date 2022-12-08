@@ -36,7 +36,7 @@ const jump_title = [
 
 const yiyan = ref<string>('')
 const fromwhere = ref<string>('')
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/yiyanrandom`).then(res=>res.json()
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/yiyan/yiyanrandom`).then(res=>res.json()
 ).then(y=>{
     yiyan.value = y.yiyan
     fromwhere.value = y.fromwhere

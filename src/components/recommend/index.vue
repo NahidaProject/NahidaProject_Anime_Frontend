@@ -40,7 +40,7 @@ interface animedata {
     a_recommend: boolean
 }
 let animes = ref(<{}>[])
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/getAllAnime`)
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/getAllAnime`)
     .then(data => data.json())
     .then(anime => {
         let a: animedata[] = []
