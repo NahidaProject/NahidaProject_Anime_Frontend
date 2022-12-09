@@ -9,12 +9,12 @@
                 <div class="main">
                     <video width="800" height="500" ref="videoPlayer" class="video-js"></video>
                     <div class="introduce">
-                        <div class="a_name">{{ thisanime['a_name'] }}</div>
-                        <div class="a_lang">语言: {{ thisanime['a_lang'] }}</div>
-                        <div class="a_cv">CV: {{ thisanime['a_cv'] }}</div>
-                        <div class="a_releace_date">上映日期: {{ thisanime['a_release_date'] }}</div>
-                        <div class="a_company">出品公司: {{ thisanime['a_company'] }}</div>
-                        <div class="a_desc">背景:<br/> {{ thisanime['a_desc'] }}</div>
+                        <div class="a_name">{{ thisanime['AnimeName'] }}</div>
+                        <div class="a_lang">语言: {{ thisanime['AnimeLanguage'] }}</div>
+                        <div class="a_cv">CV: {{ thisanime['CVName'] }}</div>
+                        <div class="a_releace_date">上映日期: {{ thisanime['AnimeReleaseDate'] }}</div>
+                        <div class="a_company">出品公司: {{ thisanime['AnimeCompany'] }}</div>
+                        <div class="a_desc">背景:<br/> {{ thisanime['AnimeDescription'] }}</div>
                     </div>
                 </div>
                 <ul class="list">
@@ -44,12 +44,12 @@ const myPlayer = ref()
 const vList = ref<number>()
 
 const thisanime = ref({
-    a_name: '',
-    a_lang: '',
-    a_cv: '',
-    a_release_date: '',
-    a_company: '',
-    a_desc: ''
+    AnimeName: '',
+    AnimeLanguage: '',
+    CVName: '',
+    AnimeReleaseDate: '',
+    AnimeCompany: '',
+    AnimeDescription: ''
 })
 
 const domain = ref()
@@ -59,9 +59,9 @@ let vdo: HTMLVideoElement
 
 let volumetmp = 0.1
 
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/getAnimeById/${Route.query.a_id}`).then(res => res.json()).then(a => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${parseInt(Route.query.a_id.toString())}`).then(res => res.json()).then(a => {
     thisanime.value = a
-    vList.value = a['a_set']
+    vList.value = a['AnimeEpisode']
 })
 
 const reloadvideo = (id: number) => {

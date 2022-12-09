@@ -9,13 +9,13 @@
                 slideShadows: true,
             }" :autoplay="{ delay: 3000 }">
             <swiper-slide class="card" v-for="(item, index) in animes"
-                :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/${item['a_id']}.png)` }">
+                :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/`+`${item['AnimeID']>=10?'0000':'00000'}`+`${item['AnimeID']}.png)` }">
                 <div class="ms">
                     <div class="title">
-                        {{ item['a_name'] }}
+                        {{ item['AnimeName'] }}
                     </div>
                     <p class="desc">
-                        {{ item['a_desc'] }}
+                        {{ item['AnimeDescription'] }}
                     </p>
                 </div>
             </swiper-slide>
@@ -35,17 +35,17 @@ const port = ref()
 const modules = [EffectCoverflow, Pagination, Autoplay]
 
 interface animedata {
-    a_name: string,
-    a_desc: string,
-    a_recommend: boolean
+    AnimeName: string,
+    AnimeDescription: string,
+    AnimeRecommend: string
 }
 let animes = ref(<{}>[])
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/getAllAnime`)
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAllAnimes`)
     .then(data => data.json())
     .then(anime => {
         let a: animedata[] = []
         anime.forEach((element: animedata) => {
-            if (element['a_recommend']) {
+            if (element['AnimeRecommend']=='true') {
                 a.push(element)
             }
         });
