@@ -2,8 +2,8 @@
     <div class="content_right">
         <div class="banner">
             <div class="yiyan">
-                <span>{{ yiyan }}</span>
-                <span>--{{ fromwhere }}</span>
+                <span>{{ Sentence }}</span>
+                <span>--{{ Origin }}</span>
             </div>
         </div>
         <div :id='"item" + (index + 1)' v-for="(item, index) in jump_title" :key="index">
@@ -34,12 +34,12 @@ const jump_title = [
     // { title: '搜索' }
 ]
 
-const yiyan = ref<string>('')
-const fromwhere = ref<string>('')
-fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/yiyan/yiyanrandom`).then(res=>res.json()
+const Sentence = ref<string>('')
+const Origin = ref<string>('')
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/YiYan/Random`).then(res=>res.json()
 ).then(y=>{
-    yiyan.value = y.yiyan
-    fromwhere.value = y.fromwhere
+    Sentence.value = y.Sentence
+    Origin.value = y.Origin
 })
 
 onMounted(() => {
