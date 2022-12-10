@@ -4,6 +4,7 @@ specifiers:
   '@popperjs/core': ^2.11.6
   '@vitejs/plugin-vue': ^4.0.0
   bootstrap: ^5.2.3
+  gsap: ^3.11.3
   sass: ^1.56.2
   vite: ^4.0.0
   vue: ^3.2.45
@@ -11,6 +12,7 @@ specifiers:
 dependencies:
   '@popperjs/core': 2.11.6
   bootstrap: 5.2.3_@popperjs+core@2.11.6
+  gsap: 3.11.3
   vue: 3.2.45
 
 devDependencies:
@@ -433,6 +435,10 @@ packages:
     dependencies:
       is-glob: 4.0.3
     dev: true
+
+  /gsap/3.11.3:
+    resolution: {integrity: sha512-xc/iIJy+LWiMbRa4IdMtdnnKa/7PXEK6NNzV71gdOYUVeTZN7UWnLU0fB7Hi1iwiz4ZZoYkBZPPYGg+2+zzFHA==}
+    dev: false
 
   /has/1.0.3:
     resolution: {integrity: sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==}
