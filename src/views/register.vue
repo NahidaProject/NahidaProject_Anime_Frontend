@@ -7,13 +7,19 @@
                 </router-link>
             </div>
             <div class="w-75 mx-auto mt-5">
-                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号/邮箱">
+                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入昵称">
+            </div>
+            <div class="w-75 mx-auto mt-3">
+                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号">
             </div>
             <div class="w-75 mx-auto mt-3">
                 <input type="password" class="form-control p-2" id="colFormLabel" placeholder="请输入密码">
             </div>
+            <div class="w-75 mx-auto mt-3">
+                <input type="password" class="form-control p-2" id="colFormLabel" placeholder="确认密码">
+            </div>
             <div class="w-75 mx-auto mt-5">
-                <button type="button" class="w-100 btn btn-danger p-2" @click="login">登录</button>
+                <button type="button" class="w-100 btn btn-danger p-2" @click="register">注册</button>
             </div>
             <div class="w-100">
                 <ul class="me-5 mt-5 justify-content-end d-flex">
@@ -23,8 +29,8 @@
                         </router-link>
                     </li>
                     <li class="nav-item ms-3">
-                        <router-link class="router-link" to="register">
-                            <a class="nav-link text-muted">立即注册</a>
+                        <router-link class="router-link" to="login">
+                            <a class="nav-link text-muted">返回登录</a>
                         </router-link>
                     </li>
                 </ul>
@@ -34,8 +40,8 @@
 </template>
 
 <script setup lang="ts">
-const login = () => {
-    console.log('Login');
+const register = () => {
+    console.log('Register');
 }
 </script>
 

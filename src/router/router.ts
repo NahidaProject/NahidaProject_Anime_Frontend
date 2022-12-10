@@ -4,7 +4,8 @@ import Animes from '../views/animes.vue'
 import Forum from '../views/forum.vue'
 import SearchResult from '../views/searchResult.vue'
 import Login from '../views/login.vue'
-
+import Forgot from '../views/forgot.vue'
+import Register from '../views/register.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -33,6 +34,20 @@ const routes: Array<RouteRecordRaw> = [
         component: Login,
         meta: {
             title: '登录'
+        }
+    },
+    {
+        path: '/forgot',
+        component: Forgot,
+        meta: {
+            title: '忘记密码'
+        }
+    },
+    {
+        path: '/register',
+        component: Register,
+        meta: {
+            title: '立即注册'
         }
     },
     {
