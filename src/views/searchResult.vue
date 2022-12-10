@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <Navigation></Navigation>
-        {{route.query.keyword}}
+        <Navigation/>
+        {{route.query.keyword==''?'阁下请你认真点>~<':route.query.keyword}}
         <Footer></Footer>
     </div>
 </template>

@@ -1,4 +1,5 @@
 <template>
+    <Modal :title="modalTitle" :message="modalMessage" ref="lModal" />
     <div class="customContainer">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
@@ -34,8 +35,19 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import { RouterLink } from 'vue-router';
+import Modal from '../components/Modal/index.vue'
+
+// 模态框
+const modalTitle = ref('')
+const modalMessage = ref('')
+const lModal = ref<InstanceType<typeof Modal>>()
+
 const login = () => {
-    console.log('Login');
+    modalTitle.value = '{{{(>_<)}}}'
+    modalMessage.value = '接口未实现'
+    lModal.value?.showModal()
 }
 </script>
 

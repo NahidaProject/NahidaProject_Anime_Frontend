@@ -1,4 +1,5 @@
 <template>
+    <Modal :title="modalTitle" :message="modalMessage" ref="rModal" />
     <div class="customContainer">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
@@ -40,8 +41,18 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+import Modal from '../components/Modal/index.vue'
+
+// 模态框
+const modalTitle = ref('')
+const modalMessage = ref('')
+const rModal = ref<InstanceType<typeof Modal>>()
+
 const register = () => {
-    console.log('Register');
+    modalTitle.value = '(●\'◡\'●)'
+    modalMessage.value = '接口未实现'
+    rModal.value?.showModal()
 }
 </script>
 
