@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <Navigation page="animes"></Navigation>
         <Footer></Footer>
     </div>

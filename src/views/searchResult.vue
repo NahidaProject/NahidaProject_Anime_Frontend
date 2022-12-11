@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <Navigation/>
         {{route.query.keyword==''?'阁下请你认真点>~<':route.query.keyword}}
         <Footer></Footer>
