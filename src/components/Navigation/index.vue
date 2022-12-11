@@ -10,7 +10,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 mt-2">
                         <li class="nav-item" v-for="item in pagesList">
                             <router-link class="router-link" :to="item.page">
                                 <a :class="currentPage.page == item.page ? 'nav-link active' : 'nav-link'"
@@ -108,7 +108,13 @@ const search = () => {
 
 .active[aria-current="page"] {
     clip-path: polygon(0 20%, 100% 20%, 100% 75%, 50% 100%, 0 75%);
-    background-color: rgba(113, 159, 228, 0.673);
+    background-color: #dc3545;
     color: white !important;
+}
+
+@media all and (width <= 990px) {
+    .active[aria-current="page"] {
+        clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0% 100%);
+    }
 }
 </style>
