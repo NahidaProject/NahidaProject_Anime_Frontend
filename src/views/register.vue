@@ -1,6 +1,6 @@
 <template>
     <Modal :title="modalTitle" :message="modalMessage" ref="rModal" />
-    <div class="customContainer">
+    <div class="customContainer container-fluid">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
                 <router-link class="router-link" to="/">
@@ -63,7 +63,6 @@ const register = () => {
     background-image: url('../assets/acfunlogin.png');
     background-size: cover;
     background-position: center;
-    min-width: 800px;
 }
 
 .login {
