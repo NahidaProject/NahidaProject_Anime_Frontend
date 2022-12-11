@@ -24,9 +24,12 @@
                     </div>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link class="router-link" to="login">
+                            <router-link class="router-link" to="login" v-if="UserName==''">
                                 <a class="nav-link" aria-current="page">登录</a>
                             </router-link>
+                            <div v-else>
+                                <a class="nav-link" aria-current="page">{{UserName}}</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -44,6 +47,12 @@ import Modal from '../Modal/index.vue'
 const router = useRouter()
 
 const searchValue = ref('')
+
+const UserName = ref('')
+
+if(document.cookie.split('=').length==2){
+    UserName.value=document.cookie.split('=')[1]
+}
 
 const currentPage = defineProps({
     page: {
