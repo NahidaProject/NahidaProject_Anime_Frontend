@@ -1,4 +1,5 @@
 <template>
+    <Modal :title="modalTitle" :message="modalMessage" ref="nModal" />
     <transition appear @before-enter="beforeEnter" @enter="enter">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -17,11 +18,10 @@
                             </router-link>
                         </li>
                     </ul>
-                    <form class="me-auto d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="你想找什么视频..." aria-label="Search"
-                            v-model="searchValue">
-                        <button class="btn btn-outline-primary" type="submit" @click="search">Q</button>
-                    </form>
+                    <div class="me-auto d-flex">
+                        <input class="form-control me-2" placeholder="你想找什么视频..." v-model="searchValue">
+                        <button class="btn btn-outline-primary" @click="search">Q</button>
+                    </div>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
                             <router-link class="router-link" to="login">
@@ -39,6 +39,7 @@
 import gsap from 'gsap'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import Modal from '../Modal/index.vue'
 
 const router = useRouter()
 
@@ -65,6 +66,11 @@ const pagesList = [
     }
 ]
 
+// 模态框
+const modalTitle = ref('')
+const modalMessage = ref('')
+const nModal = ref<InstanceType<typeof Modal>>()
+
 const beforeEnter = (element: HTMLElement) => {
     element.style.opacity = '0'
     element.style.transform = 'translateY(-100px)'
@@ -79,12 +85,18 @@ const enter = (element: HTMLElement) => {
 }
 
 const search = () => {
-    router.push({
-        path: '/searchResult',
-        query: {
-            'keyword': searchValue.value
-        }
-    })
+    if (searchValue.value) {
+        router.push({
+            path: '/searchResult',
+            query: {
+                'keyword': searchValue.value
+            }
+        })
+    } else {
+        modalTitle.value = '(lll￢ω￢)'
+        modalMessage.value = '阁下认真的吗?'
+        nModal.value?.showModal()
+    }
 }
 </script>
 
