@@ -8,10 +8,12 @@
                 </router-link>
             </div>
             <div class="w-75 mx-auto mt-5">
-                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号/邮箱">
+                <input v-model="accountValue" type="text" class="form-control p-2" id="colFormLabel"
+                    placeholder="请输入账号/邮箱">
             </div>
             <div class="w-75 mx-auto mt-3">
-                <input type="password" class="form-control p-2" id="colFormLabel" placeholder="请输入密码">
+                <input v-model="passwordValue" type="password" class="form-control p-2" id="colFormLabel"
+                    placeholder="请输入密码">
             </div>
             <div class="w-75 mx-auto mt-5">
                 <button type="button" class="w-100 btn btn-danger p-2" @click="login">登录</button>
@@ -38,6 +40,9 @@
 import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import Modal from '../components/Modal/index.vue'
+import router from '../router/router';
+const accountValue = ref('')
+const passwordValue = ref('')
 
 // 模态框
 const modalTitle = ref('')
@@ -45,9 +50,33 @@ const modalMessage = ref('')
 const lModal = ref<InstanceType<typeof Modal>>()
 
 const login = () => {
-    modalTitle.value = '{{{(>_<)}}}'
-    modalMessage.value = '接口未实现'
-    lModal.value?.showModal()
+    if (accountValue.value && passwordValue.value) {
+        fetch('http://localhost:1314/api/user/login', {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            body: JSON.stringify({
+                UserAccount: accountValue.value,
+                UserPassword: passwordValue.value
+            }),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(res => {
+            if (res.status == 403) {
+                console.log(res.json());
+                modalTitle.value = '{{{(>_<)}}}'
+                modalMessage.value = '用户不存在或密码错误'
+                lModal.value?.showModal()
+            } else {
+                router.push('/')
+            }
+        })
+    } else {
+        modalTitle.value = '{{{(>_<)}}}'
+        modalMessage.value = '请输入用户账号和密码'
+        lModal.value?.showModal()
+    }
 }
 </script>
 

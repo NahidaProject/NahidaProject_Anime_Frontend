@@ -8,16 +8,20 @@
                 </router-link>
             </div>
             <div class="w-75 mx-auto mt-5">
-                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入昵称">
+                <input v-model="UserName" type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入昵称">
             </div>
             <div class="w-75 mx-auto mt-3">
-                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号">
+                <input v-model="UserAccount" type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号">
             </div>
             <div class="w-75 mx-auto mt-3">
-                <input type="password" class="form-control p-2" id="colFormLabel" placeholder="请输入密码">
+                <input v-model="UserPassword" type="password" class="form-control p-2" id="colFormLabel"
+                    placeholder="请输入密码">
             </div>
             <div class="w-75 mx-auto mt-3">
                 <input type="password" class="form-control p-2" id="colFormLabel" placeholder="确认密码">
+            </div>
+            <div class="w-75 mx-auto mt-3">
+                <input v-model="UserGender" type="text" class="form-control p-2" id="colFormLabel" placeholder="请选择性别">
             </div>
             <div class="w-75 mx-auto mt-5">
                 <button type="button" class="w-100 btn btn-danger p-2" @click="register">注册</button>
@@ -43,6 +47,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Modal from '../components/Modal/index.vue'
+import router from '../router/router';
+const UserName = ref('')
+const UserAccount = ref('')
+const UserGender = ref('')
+const UserPassword = ref('')
 
 // 模态框
 const modalTitle = ref('')
@@ -50,9 +59,31 @@ const modalMessage = ref('')
 const rModal = ref<InstanceType<typeof Modal>>()
 
 const register = () => {
-    modalTitle.value = '(●\'◡\'●)'
-    modalMessage.value = '接口未实现'
-    rModal.value?.showModal()
+    fetch('http://localhost:1314/api/user/GetCurrentUserID').then(res => res.json()).then(data => {
+        const date = new Date()
+        fetch('http://localhost:1314/api/user/NewUser', {
+            method: 'POST',
+            mode: 'cors',
+            credentials: 'include',
+            body: JSON.stringify({
+                UserID: data,
+                UserName: UserName.value,
+                UserAccount: UserAccount.value,
+                UserPassword: UserPassword.value,
+                UserGender: UserGender.value,
+                UserRegisterDate: `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+            }),
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        }).then(res => {
+            if (res.status == 200) {
+                modalTitle.value = '(●\'◡\'●)'
+                modalMessage.value = '注册成功'
+                rModal.value?.showModal()
+            }
+        })
+    })
 }
 </script>
 

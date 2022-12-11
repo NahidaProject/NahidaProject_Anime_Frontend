@@ -8,10 +8,15 @@
                 </router-link>
             </div>
             <div class="w-75 mx-auto mt-5">
-                <input type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入注册账号所绑定的邮箱">
+                <input v-model="UserAccount" type="text" class="form-control p-2" id="colFormLabel" placeholder="请输入账号">
             </div>
             <div class="w-75 mx-auto mt-3">
-                <input type="password" class="form-control p-2" id="colFormLabel" placeholder="请输入新密码">
+                <input v-model="UserEmail" type="text" class="form-control p-2" id="colFormLabel"
+                    placeholder="请输入账号所绑定的邮箱">
+            </div>
+            <div class="w-75 mx-auto mt-3">
+                <input v-model="UserPassword" type="password" class="form-control p-2" id="colFormLabel"
+                    placeholder="请输入新密码">
             </div>
             <div class="w-75 mx-auto mt-3">
                 <input type="password" class="form-control p-2" id="colFormLabel" placeholder="确认新密码">
@@ -41,15 +46,38 @@
 import { ref } from 'vue';
 import Modal from '../components/Modal/index.vue'
 
+const UserAccount = ref('')
+const UserEmail = ref('')
+const UserPassword = ref('')
+
 // 模态框
 const modalTitle = ref('')
 const modalMessage = ref('')
 const fModal = ref<InstanceType<typeof Modal>>()
 
 const update = () => {
-    modalTitle.value = '( •̀ ω •́ )✧'
-    modalMessage.value = '接口未实现'
-    fModal.value?.showModal()
+    fetch('http://localhost:1314/api/user/forgot', {
+        method: 'POST',
+        mode: 'cors',
+        credentials: 'include',
+        body: JSON.stringify({
+            UserAccount: UserAccount.value,
+            UserEmail: UserEmail.value,
+            UserPassword: UserPassword.value,
+        }),
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
+    }).then(async res => {
+        const status = await res.json()
+        modalTitle.value = '( •̀ ω •́ )✧'
+        if (res.status == 200 && status == 'SUCCESS') {
+            modalMessage.value = '修改成功'
+        } else {
+            modalMessage.value = '失败, 请检查账号邮箱是否正确'
+        }
+        fModal.value?.showModal()
+    })
 }
 </script>
 
