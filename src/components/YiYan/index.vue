@@ -1,5 +1,5 @@
 <template>
-    <div class="card container">
+    <div class="card container-fluid">
         <div class="card-img-top img rounded-2"></div>
         <div class="card-body">
             <p class="card-text text-end">{{ YiYan.Sentence }}</p>
@@ -28,6 +28,6 @@ fetch('http://localhost:1314/api/YiYan/Random').then(async res => {
     background-image: url(http://www.cilicili.cc/api/images/bg);
     background-size: cover;
     background-position: center;
-    height: 30vh;
+    height: 40vh;
 }
 </style>
