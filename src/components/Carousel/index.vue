@@ -28,7 +28,7 @@ import { reactive } from 'vue';
 
 let newsList: any = reactive([])
 
-fetch('http://localhost:1314/api/anime/GetRecommandAnimes').then(async res => {
+fetch('http://localhost:1314/api/anime/GetRecommendAnimes').then(async res => {
     newsList.push(...await res.json())
 })
 

@@ -2,7 +2,45 @@
     <div class="container-fluid">
         <Navigation page="animes"></Navigation>
         <div class="content">
-            <Carousel></Carousel>
+            <Carousel class="my-3"></Carousel>
+            <div class="select container-fluid d-flex flex-warp">
+                <div class="shown w-75">
+                    <div class="mx-3 my-3" v-for="item in animeList">
+                        <div class="card-img"
+                            :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
+                        </div>
+                        <div class="animename">{{ item['AnimeName'] }}</div>
+                    </div>
+                </div>
+                <div class="filter w-25 d-none d-lg-block" style="min-width: 310px;">
+                    <div class="filter-title">筛选</div>
+                    <div class="d-flex">
+                        <div>地区</div>
+                        <ul class="d-inline">
+                            <li class="mx-2 d-inline" v-for="item in animeLanguage" :title="item.LanguageName">{{
+                                    item.LanguageName
+                            }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex">
+                        <div>状态</div>
+                        <ul class="d-inline">
+                            <li class="mx-2 d-inline" :title="item.StatsName" v-for="item in animeStats">
+                                {{ item.StatsName }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="d-flex">
+                        <div>风格</div>
+                        <ul style="max-width: 230px;">
+                            <li class="mx-2 d-inline" :title="item.Type" v-for="item in animeType">
+                                {{ item.Type }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </div>
         <Footer></Footer>
     </div>
@@ -12,9 +50,144 @@
 import Navigation from '../components/Navigation/index.vue'
 import Footer from '../components/Footer/index.vue'
 import Carousel from '../components/Carousel/index.vue'
+import { ref } from 'vue';
 
+let animeList = ref([])
+
+fetch('http://localhost:1314/api/anime/GetAllAnimes').then(res => res.json()).then(data => {
+    animeList.value = data
+})
+const animeStats = [
+    {
+        StatsID: 0,
+        StatsName: '全部'
+    },
+    {
+        StatsID: 1,
+        StatsName: '已完结'
+    },
+    {
+        StatsID: 2,
+        StatsName: '连载中'
+    }
+]
+const animeLanguage = [
+    {
+        LanguageID: 0,
+        LanguageName: '全部'
+    },
+    {
+        LanguageID: 1,
+        LanguageName: '国语'
+    },
+    {
+        LanguageID: 2,
+        LanguageName: '粤语'
+    },
+    {
+        LanguageID: 3,
+        LanguageName: '日语'
+    },
+    {
+        LanguageID: 4,
+        LanguageName: '英语'
+    }
+]
+const animeType = [
+    {
+        TypeID: 0,
+        Type: '全部'
+    },
+
+    {
+        TypeID: 2,
+        Type: '魔法'
+    },
+    {
+        TypeId: 3,
+        Type: '奇幻'
+    },
+    {
+        TypeId: 4,
+        Type: '架空'
+    },
+    {
+        TypeId: 5,
+        Type: '原创'
+    },
+    {
+        TypeId: 6,
+        Type: '战斗'
+    },
+    {
+        TypeId: 7,
+        Type: '日常'
+    },
+    {
+        TypeId: 8,
+        Type: '喜剧'
+    },
+    {
+        TypeId: 9,
+        Type: '恋爱'
+    },
+    {
+        TypeId: 10,
+        Type: '动画'
+    },
+    {
+        TypeId: 11,
+        Type: '校园'
+    },
+    {
+        TypeId: 12,
+        Type: '百合'
+    },
+    {
+        TypeID: 1,
+        Type: '小说改'
+    }
+]
 </script>
 
 <style scoped>
+.filter-title {
+    color: #333;
+    font-size: 1.1em;
+    margin: -5px 0 20px;
+    padding-left: 12px;
+    position: relative;
+}
 
+.shown {
+    display: flex;
+    max-width: 75%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.card-img {
+    width: 160px;
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+}
+
+.animename {
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis "...";
+}
+
+.filter-title::before {
+    background-color: #ff4c4c;
+    border-radius: 3px;
+    content: " ";
+    width: 4px;
+    height: 18px;
+    position: absolute;
+    top: 3px;
+    left: 0;
+}
 </style>
