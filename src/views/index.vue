@@ -8,8 +8,8 @@
         <News></News>
         <div class="d-flex flex-column flex-fill" style="max-width: 450px;">
           <div class="d-flex flex-row">
-            <input class="form-control me-2" placeholder="请输入关键字...">
-            <button class="btn btn-outline-primary">Q</button>
+            <input class="form-control me-2" placeholder="请输入关键字..." v-model="searchValue">
+            <button class="btn btn-outline-primary" @click="Search">Q</button>
           </div>
           <!-- 本月热点 -->
           <Hots></Hots>
@@ -26,6 +26,26 @@ import Footer from '../components/Footer/index.vue'
 import YiYan from '../components/YiYan/index.vue'
 import News from '../components/NewsList/index.vue'
 import Hots from '../components/HotsList/index.vue'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import Bus from '../Bus'
+const router = useRouter()
+const searchValue = ref('')
+const Search = () => {
+  if (searchValue.value) {
+    router.push({
+      path: '/searchResult',
+      query: {
+        'keyword': searchValue.value
+      }
+    })
+  } else {
+    Bus.emit('showmessage', {
+      title: '(lll￢ω￢)',
+      message: '阁下认真的吗?'
+    })
+  }
+}
 </script>
 
 <style scoped>

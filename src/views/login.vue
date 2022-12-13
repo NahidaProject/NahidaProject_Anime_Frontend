@@ -1,5 +1,5 @@
 <template>
-    <Modal :title="modalTitle" :message="modalMessage" ref="lModal" />
+    <Modal />
     <div class="customContainer container-fluid">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
@@ -41,13 +41,10 @@ import { ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import Modal from '../components/Modal/index.vue'
 import router from '../router/router';
+import Bus from '../Bus'
+
 const accountValue = ref('')
 const passwordValue = ref('')
-
-// 模态框
-const modalTitle = ref('')
-const modalMessage = ref('')
-const lModal = ref<InstanceType<typeof Modal>>()
 
 const login = () => {
     if (accountValue.value && passwordValue.value) {
@@ -64,18 +61,19 @@ const login = () => {
             })
         }).then(res => {
             if (res.status == 403) {
-                console.log(res.json());
-                modalTitle.value = '{{{(>_<)}}}'
-                modalMessage.value = '用户不存在或密码错误'
-                lModal.value?.showModal()
+                Bus.emit('showmessage', {
+                    title: '{{{(>_<)}}}',
+                    message: '用户不存在或密码错误'
+                })
             } else {
                 router.push('/')
             }
         })
     } else {
-        modalTitle.value = '{{{(>_<)}}}'
-        modalMessage.value = '请输入用户账号和密码'
-        lModal.value?.showModal()
+        Bus.emit('showmessage', {
+            title: '{{{(>_<)}}}',
+            message: '请输入用户账号和密码'
+        })
     }
 }
 </script>

@@ -1,16 +1,20 @@
 <template>
+    <Modal v-if=false></Modal>
     <div class="d-flex flex-column" style="max-width: 750px;">
         <h2 class="widget-title"><strong>资讯</strong></h2>
         <div class="card border-light mb-4" v-for="item in newsList">
             <div class="row g-0">
                 <div class="col-md-4">
-                    <div class="img-fluid rounded-start h-100 card-img"
+                    <div class="img-fluid rounded-start h-100 card-img" @click="GetInformation(item.NewsID)"
                         :style="{ 'background-image': 'url(http://localhost:1314/anime/news/card/' + item.NewsID + '.jpg)' }">
                     </div>
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-text"><strong>{{ item.NewsTitle }}</strong></h5>
+                        <h5 class="card-text " style="cursor: pointer;" @click="GetInformation(item.NewsID)"><strong>{{
+                                item.NewsTitle
+                        }}</strong>
+                        </h5>
                         <hr>
                         <p class="card-text">
                             <small>
@@ -29,12 +33,19 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-
-let newsList:any = reactive([])
+import Modal from '../Modal/index.vue'
+import Bus from '../../Bus'
+let newsList: any = reactive([])
 
 fetch('http://localhost:1314/api/news/GetAllNews').then(async res => {
     newsList.push(...await res.json())
 })
+
+const GetInformation = async (NewsID: Number) => {
+    await fetch(`http://localhost:1314/api/news/GetNewsContentByID/${NewsID}`).then(async res => {
+        Bus.emit('shownews', await res.json())
+    })
+}
 </script>
 
 <style scoped>
@@ -60,5 +71,6 @@ fetch('http://localhost:1314/api/news/GetAllNews').then(async res => {
 .card-img {
     background-size: cover;
     background-position: top;
+    cursor: pointer;
 }
 </style>

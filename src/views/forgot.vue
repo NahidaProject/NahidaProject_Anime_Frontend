@@ -1,5 +1,5 @@
 <template>
-    <Modal :title="modalTitle" :message="modalMessage" ref="fModal" />
+    <Modal />
     <div class="customContainer container-fluid">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
@@ -45,15 +45,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Modal from '../components/Modal/index.vue'
+import Bus from '../Bus'
 
 const UserAccount = ref('')
 const UserEmail = ref('')
 const UserPassword = ref('')
-
-// 模态框
-const modalTitle = ref('')
-const modalMessage = ref('')
-const fModal = ref<InstanceType<typeof Modal>>()
 
 const update = () => {
     fetch('http://localhost:1314/api/user/forgot', {
@@ -70,13 +66,16 @@ const update = () => {
         })
     }).then(async res => {
         const status = await res.json()
-        modalTitle.value = '( •̀ ω •́ )✧'
+        let modalMessage
         if (res.status == 200 && status == 'SUCCESS') {
-            modalMessage.value = '修改成功'
+            modalMessage = '修改成功'
         } else {
-            modalMessage.value = '失败, 请检查账号邮箱是否正确'
+            modalMessage = '失败, 请检查账号邮箱是否正确'
         }
-        fModal.value?.showModal()
+        Bus.emit('showmessage', {
+            title: '( •̀ ω •́ )✧',
+            message: modalMessage
+        })
     })
 }
 </script>

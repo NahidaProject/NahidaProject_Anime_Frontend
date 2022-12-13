@@ -1,5 +1,5 @@
 <template>
-    <Modal :title="modalTitle" :message="modalMessage" ref="rModal" />
+    <Modal />
     <div class="customContainer container-fluid">
         <div class="login rounded-4 position-absolute top-50 start-50 translate-middle">
             <div class="first">
@@ -47,16 +47,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import Modal from '../components/Modal/index.vue'
-import router from '../router/router';
+import Bus from '../Bus'
+
 const UserName = ref('')
 const UserAccount = ref('')
 const UserGender = ref('')
 const UserPassword = ref('')
-
-// 模态框
-const modalTitle = ref('')
-const modalMessage = ref('')
-const rModal = ref<InstanceType<typeof Modal>>()
 
 const register = () => {
     fetch('http://localhost:1314/api/user/GetCurrentUserID').then(res => res.json()).then(data => {
@@ -78,9 +74,10 @@ const register = () => {
             })
         }).then(res => {
             if (res.status == 200) {
-                modalTitle.value = '(●\'◡\'●)'
-                modalMessage.value = '注册成功'
-                rModal.value?.showModal()
+                Bus.emit('showmessage', {
+                    title: '(●\'◡\'●)',
+                    message: '注册成功'
+                })
             }
         })
     })

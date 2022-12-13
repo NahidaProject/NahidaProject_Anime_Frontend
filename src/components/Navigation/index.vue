@@ -1,5 +1,5 @@
 <template>
-    <Modal :title="modalTitle" :message="modalMessage" ref="nModal" />
+    <Modal />
     <transition appear @before-enter="beforeEnter" @enter="enter">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
@@ -24,11 +24,11 @@
                     </div>
                     <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <router-link class="router-link" to="login" v-if="UserName==''">
+                            <router-link class="router-link" to="login" v-if="UserName == ''">
                                 <a class="nav-link" aria-current="page">登录</a>
                             </router-link>
                             <div v-else>
-                                <a class="nav-link" aria-current="page">{{UserName}}</a>
+                                <a class="nav-link" aria-current="page">{{ UserName }}</a>
                             </div>
                         </li>
                     </ul>
@@ -43,6 +43,7 @@ import gsap from 'gsap'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Modal from '../Modal/index.vue'
+import Bus from '../../Bus'
 
 const router = useRouter()
 
@@ -50,8 +51,8 @@ const searchValue = ref('')
 
 const UserName = ref('')
 
-if(document.cookie.split('=').length==2){
-    UserName.value=document.cookie.split('=')[1]
+if (document.cookie.split('=').length == 2) {
+    UserName.value = document.cookie.split('=')[1]
 }
 
 const currentPage = defineProps({
@@ -75,11 +76,6 @@ const pagesList = [
     }
 ]
 
-// 模态框
-const modalTitle = ref('')
-const modalMessage = ref('')
-const nModal = ref<InstanceType<typeof Modal>>()
-
 const beforeEnter = (element: HTMLElement) => {
     element.style.opacity = '0'
     element.style.transform = 'translateY(-100px)'
@@ -102,9 +98,10 @@ const search = () => {
             }
         })
     } else {
-        modalTitle.value = '(lll￢ω￢)'
-        modalMessage.value = '阁下认真的吗?'
-        nModal.value?.showModal()
+        Bus.emit('showmessage', {
+            title: '(lll￢ω￢)',
+            message: '阁下认真的吗?'
+        })
     }
 }
 </script>
@@ -121,7 +118,7 @@ const search = () => {
     color: white !important;
 }
 
-@media all and (width <= 990px) {
+@media all and (width <=990px) {
     .active[aria-current="page"] {
         clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0% 100%);
     }
