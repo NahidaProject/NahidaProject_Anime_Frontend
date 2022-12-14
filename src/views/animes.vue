@@ -6,7 +6,7 @@
             <div class="select container-fluid d-flex flex-warp">
                 <div class="shown w-75">
                     <div class="mx-3 my-3" v-for="item in animeList">
-                        <div class="card-img"
+                        <div class="card-img" @click="play(item['AnimeID'])"
                             :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
                         </div>
                         <div class="animename">{{ item['AnimeName'] }}</div>
@@ -51,12 +51,22 @@ import Navigation from '../components/Navigation/index.vue'
 import Footer from '../components/Footer/index.vue'
 import Carousel from '../components/Carousel/index.vue'
 import { ref } from 'vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter()
 let animeList = ref([])
 
 fetch('http://localhost:1314/api/anime/GetAllAnimes').then(res => res.json()).then(data => {
     animeList.value = data
 })
+
+const play = (animeid: number) => {
+    router.push({
+        path: '/animePlayer',
+        query: {
+            'animeid': animeid
+        }
+    })
+}
 const animeStats = [
     {
         StatsID: 0,

@@ -4,7 +4,7 @@
             <div class="carousel-inner">
                 <div :class="index == 0 ? 'carousel-item active data-bs-interval' : 'carousel-item  data-bs-interval'"
                     v-for="item,index in newsList">
-                    <div class="card-img d-block w-100"
+                    <div class="card-img d-block w-100" @click="play(item.AnimeID)"
                         :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + `${item.AnimeID >= 10 ? '0000' + item.AnimeID : '00000' + item.AnimeID}` + '.png)' }">
                     </div>
                     <div class="carousel-caption d-none d-md-block">
@@ -25,12 +25,22 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-
+import { useRouter } from 'vue-router';
+const router = useRouter()
 let newsList: any = reactive([])
 
 fetch('http://localhost:1314/api/anime/GetRecommendAnimes').then(async res => {
     newsList.push(...await res.json())
 })
+
+const play = (animeid: number) => {
+    router.push({
+        path: '/animePlayer',
+        query: {
+            'animeid': animeid
+        }
+    })
+}
 
 </script>
 

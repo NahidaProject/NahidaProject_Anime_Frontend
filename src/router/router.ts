@@ -6,6 +6,7 @@ import SearchResult from '../views/searchResult.vue'
 import Login from '../views/login.vue'
 import Forgot from '../views/forgot.vue'
 import Register from '../views/register.vue'
+import AnimePlayer from '../views/animePlayer.vue'
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -55,6 +56,13 @@ const routes: Array<RouteRecordRaw> = [
         component: SearchResult,
         meta: {
             title: '搜索结果'
+        }
+    },
+    {
+        path: '/animePlayer',
+        component: AnimePlayer,
+        meta: {
+            title: '播放器'
         }
     }
 ]
