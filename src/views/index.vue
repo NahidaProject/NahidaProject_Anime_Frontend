@@ -27,17 +27,20 @@ import YiYan from '../components/YiYan/index.vue'
 import News from '../components/NewsList/index.vue'
 import Hots from '../components/HotsList/index.vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import Bus from '../Bus'
-const router = useRouter()
 const searchValue = ref('')
 const Search = () => {
   if (searchValue.value) {
-    router.push({
-      path: '/searchResult',
-      query: {
-        'keyword': searchValue.value
-      }
+    fetch('http://localhost:1314/api/news/FindNews', {
+      method: 'POST',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      }),
+      body: JSON.stringify({
+        NewsTitle: searchValue.value
+      })
+    }).then(res => res.json()).then(data => {
+      Bus.emit('listnews', data)
     })
   } else {
     Bus.emit('showmessage', {

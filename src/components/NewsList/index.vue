@@ -32,13 +32,22 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import Modal from '../Modal/index.vue'
 import Bus from '../../Bus'
-let newsList: any = reactive([])
+let newsList = ref()
+
+onUnmounted(() => {
+    // 组件销毁时把任务列表清空
+    Bus.off()
+})
+
+Bus.on('listnews', (news: any) => {
+    newsList.value = news
+})
 
 fetch('http://localhost:1314/api/news/GetAllNews').then(async res => {
-    newsList.push(...await res.json())
+    newsList.value = await res.json()
 })
 
 const GetInformation = async (NewsID: Number) => {
