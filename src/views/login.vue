@@ -48,7 +48,7 @@ const passwordValue = ref('')
 
 const login = () => {
     if (accountValue.value && passwordValue.value) {
-        fetch('http://localhost:1314/api/user/login', {
+        fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/user/login`, {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',

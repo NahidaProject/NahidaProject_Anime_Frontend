@@ -9,7 +9,7 @@
 import Navigation from '../components/Navigation/index.vue'
 import Footer from '../components/Footer/index.vue'
 import router from '../router/router';
-fetch('http://localhost:1314/api/serverStatus', {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/serverStatus`, {
     method: 'POST',
     mode: 'cors',
     credentials: 'include',

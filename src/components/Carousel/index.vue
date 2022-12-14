@@ -5,7 +5,7 @@
                 <div :class="index == 0 ? 'carousel-item active data-bs-interval' : 'carousel-item  data-bs-interval'"
                     v-for="item,index in newsList">
                     <div class="card-img d-block w-100" @click="play(item.AnimeID)"
-                        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + `${item.AnimeID >= 10 ? '0000' + item.AnimeID : '00000' + item.AnimeID}` + '.png)' }">
+                        :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + `${item.AnimeID >= 10 ? '0000' + item.AnimeID : '00000' + item.AnimeID}` + '.png)' }">
                     </div>
                     <div class="carousel-caption d-none d-md-block">
                         <h1>{{ item.AnimeName }}</h1>
@@ -24,12 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 let newsList: any = reactive([])
-
-fetch('http://localhost:1314/api/anime/GetRecommendAnimes').then(async res => {
+const domain = ref('')
+const port = ref('')
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetRecommendAnimes`).then(async res => {
+    domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+    port.value = import.meta.env.VITE_BACKEND_PORT
     newsList.push(...await res.json())
 })
 

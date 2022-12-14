@@ -52,7 +52,7 @@ const UserEmail = ref('')
 const UserPassword = ref('')
 
 const update = () => {
-    fetch('http://localhost:1314/api/user/forgot', {
+    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/user/forgot`, {
         method: 'POST',
         mode: 'cors',
         credentials: 'include',

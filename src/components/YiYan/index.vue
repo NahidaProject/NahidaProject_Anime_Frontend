@@ -16,7 +16,7 @@ const YiYan = reactive({
     Origin: ''
 })
 
-fetch('http://localhost:1314/api/YiYan/Random').then(async res => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/YiYan/Random`).then(async res => {
     const { Sentence, Origin } = await res.json()
     YiYan.Sentence = Sentence
     YiYan.Origin = Origin

@@ -1,6 +1,6 @@
 <template>
     <div class="card-img p-5"
-        :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + nowplayerid + '.png)' }">
+        :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + nowplayerid + '.png)' }">
         <div class="container-fluid vdo">
             <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true"
                 preload="auto"></video>
@@ -24,7 +24,12 @@ import { onMounted, ref } from 'vue';
 const route = useRoute()
 const aid = route.query.animeid as any
 const nowplayeranime = ref('')
-fetch(`http://localhost:1314/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
+const domain = ref('')
+const port = ref('')
+
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
+    domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+    port.value = import.meta.env.VITE_BACKEND_PORT
     nowplayeranime.value = data['AnimeEpisode']
 })
 const nowplayerid = ref('')
@@ -40,7 +45,7 @@ const newepisode = (id: any) => {
     videojs(document.querySelector('#myVideo')!, {
         controls: true,
         sources: [{
-            src: `http://localhost:1314/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`,
+            src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`,
         }
         ]
     })
@@ -55,7 +60,7 @@ onMounted(() => {
     videojs(document.querySelector('#myVideo')!, {
         controls: true,
         sources: [{
-            src: `http://localhost:1314/anime/videos/${nowplayerid.value}/${nowplayerid.value}_001.mp4`,
+            src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_001.mp4`,
         }
         ]
     })

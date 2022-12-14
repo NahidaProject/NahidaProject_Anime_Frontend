@@ -31,7 +31,7 @@ import Bus from '../Bus'
 const searchValue = ref('')
 const Search = () => {
   if (searchValue.value) {
-    fetch('http://localhost:1314/api/news/FindNews', {
+    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/news/FindNews`, {
       method: 'POST',
       headers: new Headers({
         'Content-Type': 'application/json'

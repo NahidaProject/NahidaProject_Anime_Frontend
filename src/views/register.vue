@@ -55,9 +55,9 @@ const UserGender = ref('')
 const UserPassword = ref('')
 
 const register = () => {
-    fetch('http://localhost:1314/api/user/GetCurrentUserID').then(res => res.json()).then(data => {
+    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/user/GetCurrentUserID`).then(res => res.json()).then(data => {
         const date = new Date()
-        fetch('http://localhost:1314/api/user/NewUser', {
+        fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/user/NewUser`, {
             method: 'POST',
             mode: 'cors',
             credentials: 'include',

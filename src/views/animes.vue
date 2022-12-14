@@ -7,7 +7,7 @@
                 <div class="shown w-75">
                     <div class="mx-3 my-3" v-for="item in animeList">
                         <div class="card-img" @click="play(item['AnimeID'])"
-                            :style="{ 'background-image': 'url(http://localhost:1314/anime/main_image/' + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
+                            :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
                         </div>
                         <div class="animename">{{ item['AnimeName'] }}</div>
                     </div>
@@ -17,16 +17,18 @@
                     <div class="d-flex">
                         <div>地区</div>
                         <ul class="d-inline">
-                            <li class="mx-2 d-inline" v-for="item in animeLanguage" :title="item.LanguageName">{{
-                                    item.LanguageName
-                            }}
+                            <li @click=clanguage(item.LanguageName) class="mx-2 d-inline" v-for="item in animeLanguage"
+                                :title="item.LanguageName">{{
+                                        item.LanguageName
+                                }}
                             </li>
                         </ul>
                     </div>
                     <div class="d-flex">
                         <div>状态</div>
                         <ul class="d-inline">
-                            <li class="mx-2 d-inline" :title="item.StatsName" v-for="item in animeStats">
+                            <li @click=cstats(item.StatsName) class="mx-2 d-inline" :title="item.StatsName"
+                                v-for="item in animeStats">
                                 {{ item.StatsName }}
                             </li>
                         </ul>
@@ -34,7 +36,8 @@
                     <div class="d-flex">
                         <div>风格</div>
                         <ul style="max-width: 230px;">
-                            <li class="mx-2 d-inline" :title="item.Type" v-for="item in animeType">
+                            <li @click=ctype(item.Type) class="mx-2 d-inline" :title="item.Type"
+                                v-for="item in animeType">
                                 {{ item.Type }}
                             </li>
                         </ul>
@@ -50,12 +53,16 @@
 import Navigation from '../components/Navigation/index.vue'
 import Footer from '../components/Footer/index.vue'
 import Carousel from '../components/Carousel/index.vue'
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
+const domain = ref('')
+const port = ref('')
 let animeList = ref([])
 
-fetch('http://localhost:1314/api/anime/GetAllAnimes').then(res => res.json()).then(data => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAllAnimes`).then(res => res.json()).then(data => {
+    domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+    port.value = import.meta.env.VITE_BACKEND_PORT
     animeList.value = data
 })
 
@@ -158,6 +165,60 @@ const animeType = [
         Type: '小说改'
     }
 ]
+const currentFilter = reactive({
+    LanguageName: '',
+    StatsName: '',
+    TypeName: ''
+})
+const Filter = () => {
+    let filter
+    if (currentFilter.LanguageName && currentFilter.StatsName && currentFilter.TypeName) {
+        filter = {
+            AnimeType: animeType.filter(t => t.Type === currentFilter.TypeName)[0].Type,
+            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName,
+            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
+        }
+    } else if (currentFilter.LanguageName && currentFilter.StatsName) {
+        filter = {
+            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName,
+            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
+        }
+    } else if (currentFilter.LanguageName) {
+        filter = {
+            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName
+        }
+    } else if (currentFilter.StatsName) {
+        filter = {
+            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
+        }
+    } else if (currentFilter.TypeName) {
+        filter = {
+            AnimeType: animeType.filter(t => t.Type === currentFilter.TypeName)[0].Type,
+        }
+    } else {
+        filter = {
+        }
+    }
+    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/FilterAnimes`,{
+        method:'POST',
+        headers:new Headers({
+            'Content-Type':'application/json'
+        }),
+        body:JSON.stringify(filter)
+    })
+}
+const clanguage = (name: string) => {
+    currentFilter.LanguageName = name
+    Filter()
+}
+const cstats = (name: string) => {
+    currentFilter.StatsName = name
+    Filter()
+}
+const ctype = (name: string) => {
+    currentFilter.TypeName = name
+    Filter()
+}
 </script>
 
 <style scoped>

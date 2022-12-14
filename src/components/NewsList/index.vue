@@ -6,7 +6,7 @@
             <div class="row g-0">
                 <div class="col-md-4">
                     <div class="img-fluid rounded-start h-100 card-img" @click="GetInformation(item.NewsID)"
-                        :style="{ 'background-image': 'url(http://localhost:1314/anime/news/card/' + item.NewsID + '.jpg)' }">
+                        :style="{ 'background-image': `url(http://${domain}:${port}/anime/news/card/` + item.NewsID + '.jpg)' }">
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -36,7 +36,8 @@ import { onUnmounted, ref } from 'vue';
 import Modal from '../Modal/index.vue'
 import Bus from '../../Bus'
 let newsList = ref()
-
+const domain = ref('')
+const port = ref('')
 onUnmounted(() => {
     // 组件销毁时把任务列表清空
     Bus.off()
@@ -46,12 +47,14 @@ Bus.on('listnews', (news: any) => {
     newsList.value = news
 })
 
-fetch('http://localhost:1314/api/news/GetAllNews').then(async res => {
+fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/news/GetAllNews`).then(async res => {
+    domain.value = import.meta.env.VITE_BACKEND_DOMAIN
+    port.value = import.meta.env.VITE_BACKEND_PORT
     newsList.value = await res.json()
 })
 
 const GetInformation = async (NewsID: Number) => {
-    await fetch(`http://localhost:1314/api/news/GetNewsContentByID/${NewsID}`).then(async res => {
+    await fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/news/GetNewsContentByID/${NewsID}`).then(async res => {
         Bus.emit('shownews', await res.json())
     })
 }
