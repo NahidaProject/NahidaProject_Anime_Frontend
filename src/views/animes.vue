@@ -165,58 +165,41 @@ const animeType = [
         Type: '小说改'
     }
 ]
-const currentFilter = reactive({
-    LanguageName: '',
-    StatsName: '',
-    TypeName: ''
+let currentFilter = reactive({
+    AnimeLanguage: '全部',
+    AnimeStats: '全部',
+    AnimeType: '全部'
 })
 const Filter = () => {
-    let filter
-    if (currentFilter.LanguageName && currentFilter.StatsName && currentFilter.TypeName) {
-        filter = {
-            AnimeType: animeType.filter(t => t.Type === currentFilter.TypeName)[0].Type,
-            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName,
-            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
-        }
-    } else if (currentFilter.LanguageName && currentFilter.StatsName) {
-        filter = {
-            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName,
-            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
-        }
-    } else if (currentFilter.LanguageName) {
-        filter = {
-            AnimeLanguage: animeLanguage.filter(t => t.LanguageName === currentFilter.LanguageName)[0].LanguageName
-        }
-    } else if (currentFilter.StatsName) {
-        filter = {
-            AnimeStats: animeStats.filter(t => t.StatsName === currentFilter.StatsName)[0].StatsName
-        }
-    } else if (currentFilter.TypeName) {
-        filter = {
-            AnimeType: animeType.filter(t => t.Type === currentFilter.TypeName)[0].Type,
-        }
-    } else {
-        filter = {
-        }
+    if (currentFilter.AnimeLanguage == '全部') {
+        currentFilter.AnimeLanguage = ''
     }
-    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/FilterAnimes`,{
-        method:'POST',
-        headers:new Headers({
-            'Content-Type':'application/json'
+    if (currentFilter.AnimeStats == '全部') {
+        currentFilter.AnimeStats = ''
+    }
+    if (currentFilter.AnimeType == '全部') {
+        currentFilter.AnimeType = ''
+    }
+    fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/FilterAnimes`, {
+        method: 'POST',
+        headers: new Headers({
+            'Content-Type': 'application/json'
         }),
-        body:JSON.stringify(filter)
+        body: JSON.stringify(currentFilter)
+    }).then(res=>res.json()).then(data=>{
+        console.log(data)
     })
 }
 const clanguage = (name: string) => {
-    currentFilter.LanguageName = name
+    currentFilter.AnimeLanguage = name
     Filter()
 }
 const cstats = (name: string) => {
-    currentFilter.StatsName = name
+    currentFilter.AnimeStats = name
     Filter()
 }
 const ctype = (name: string) => {
-    currentFilter.TypeName = name
+    currentFilter.AnimeType = name
     Filter()
 }
 </script>
