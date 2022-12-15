@@ -17,7 +17,8 @@
                     <div class="d-flex">
                         <div>地区</div>
                         <ul class="d-inline">
-                            <li @click=clanguage(item.LanguageName) class="mx-2 d-inline" v-for="item in animeLanguage"
+                            <li @click=clanguage(item.LanguageName) v-for="item,index in animeLanguage"
+                            :class="LanguageActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
                                 :title="item.LanguageName">{{
                                         item.LanguageName
                                 }}
@@ -28,7 +29,8 @@
                         <div>状态</div>
                         <ul class="d-inline">
                             <li @click=cstats(item.StatsName) class="mx-2 d-inline" :title="item.StatsName"
-                                v-for="item in animeStats">
+                            :class="StatsActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
+                                v-for="item,index in animeStats">
                                 {{ item.StatsName }}
                             </li>
                         </ul>
@@ -37,7 +39,8 @@
                         <div>风格</div>
                         <ul style="max-width: 230px;">
                             <li @click=ctype(item.Type) class="mx-2 d-inline" :title="item.Type"
-                                v-for="item in animeType">
+                            :class="TypeActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
+                                v-for="item,index in animeType">
                                 {{ item.Type }}
                             </li>
                         </ul>
@@ -59,6 +62,9 @@ const router = useRouter()
 const domain = ref('')
 const port = ref('')
 let animeList = ref([])
+const LanguageActive = ref(0)
+const TypeActive = ref(0)
+const StatsActive = ref(0)
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAllAnimes`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
@@ -117,51 +123,51 @@ const animeType = [
     },
 
     {
-        TypeID: 2,
+        TypeID: 1,
         Type: '魔法'
     },
     {
-        TypeId: 3,
+        TypeID: 2,
         Type: '奇幻'
     },
     {
-        TypeId: 4,
+        TypeID: 3,
         Type: '架空'
     },
     {
-        TypeId: 5,
+        TypeID: 4,
         Type: '原创'
     },
     {
-        TypeId: 6,
+        TypeID: 5,
         Type: '战斗'
     },
     {
-        TypeId: 7,
+        TypeID: 6,
         Type: '日常'
     },
     {
-        TypeId: 8,
+        TypeID: 7,
         Type: '喜剧'
     },
     {
-        TypeId: 9,
+        TypeID: 8,
         Type: '恋爱'
     },
     {
-        TypeId: 10,
+        TypeID: 9,
         Type: '动画'
     },
     {
-        TypeId: 11,
+        TypeID: 10,
         Type: '校园'
     },
     {
-        TypeId: 12,
+        TypeID: 11,
         Type: '百合'
     },
     {
-        TypeID: 1,
+        TypeID: 12,
         Type: '小说改'
     }
 ]
@@ -191,14 +197,17 @@ const Filter = () => {
     })
 }
 const clanguage = (name: string) => {
+    LanguageActive.value=animeLanguage.filter(e=>e.LanguageName==name)[0].LanguageID
     currentFilter.AnimeLanguage = name
     Filter()
 }
 const cstats = (name: string) => {
+    StatsActive.value=animeStats.filter(e=>e.StatsName==name)[0].StatsID
     currentFilter.AnimeStats = name
     Filter()
 }
 const ctype = (name: string) => {
+    TypeActive.value=animeType.filter(e=>e.Type==name)[0].TypeID
     currentFilter.AnimeType = name
     Filter()
 }
@@ -243,5 +252,13 @@ const ctype = (name: string) => {
     position: absolute;
     top: 3px;
     left: 0;
+}
+.filter li{
+    cursor: pointer;
+}
+.iclick{
+    color: #ff4c4c;
+    font-weight: bolder;
+    font-size: 18px;
 }
 </style>
