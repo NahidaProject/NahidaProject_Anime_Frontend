@@ -187,7 +187,7 @@ const Filter = () => {
         }),
         body: JSON.stringify(currentFilter)
     }).then(res=>res.json()).then(data=>{
-        console.log(data)
+        animeList.value = data
     })
 }
 const clanguage = (name: string) => {
