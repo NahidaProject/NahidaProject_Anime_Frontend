@@ -23,13 +23,13 @@ const routes: Array<RouteRecordRaw> = [
             title: '番剧'
         }
     },
-    {
-        path: '/forum',
-        component: Forum,
-        meta: {
-            title: '论坛'
-        }
-    },
+    // {
+    //     path: '/forum',
+    //     component: Forum,
+    //     meta: {
+    //         title: '论坛'
+    //     }
+    // },
     {
         path: '/login',
         component: Login,
