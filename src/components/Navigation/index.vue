@@ -18,7 +18,7 @@
                             </router-link>
                         </li>
                     </ul>
-                    <div class="me-auto d-flex">
+                    <div class="me-auto d-flex" v-if="currentPage.page=='animes'">
                         <input class="form-control me-2" placeholder="你想找什么视频..." v-model="searchValue">
                         <button class="btn btn-outline-primary" @click="search">Q</button>
                     </div>
@@ -41,11 +41,8 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import Modal from '../Modal/index.vue'
 import Bus from '../../Bus'
-
-const router = useRouter()
 
 const searchValue = ref('')
 
@@ -91,12 +88,7 @@ const enter = (element: HTMLElement) => {
 
 const search = () => {
     if (searchValue.value) {
-        router.push({
-            path: '/searchResult',
-            query: {
-                'keyword': searchValue.value
-            }
-        })
+        Bus.emit('SearchAnime',searchValue.value)
     } else {
         Bus.emit('showmessage', {
             title: '(lll￢ω￢)',

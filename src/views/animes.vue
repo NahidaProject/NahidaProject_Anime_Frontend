@@ -17,8 +17,8 @@
                     <div class="d-flex">
                         <div>地区</div>
                         <ul class="d-inline">
-                            <li @click=clanguage(item.LanguageName) v-for="item,index in animeLanguage"
-                            :class="LanguageActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
+                            <li @click=clanguage(item.LanguageName) v-for="item, index in animeLanguage"
+                                :class="LanguageActive == index ? 'mx-2 d-inline iclick' : 'mx-2 d-inline'"
                                 :title="item.LanguageName">{{
                                         item.LanguageName
                                 }}
@@ -29,8 +29,8 @@
                         <div>状态</div>
                         <ul class="d-inline">
                             <li @click=cstats(item.StatsName) class="mx-2 d-inline" :title="item.StatsName"
-                            :class="StatsActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
-                                v-for="item,index in animeStats">
+                                :class="StatsActive == index ? 'mx-2 d-inline iclick' : 'mx-2 d-inline'"
+                                v-for="item, index in animeStats">
                                 {{ item.StatsName }}
                             </li>
                         </ul>
@@ -39,8 +39,8 @@
                         <div>风格</div>
                         <ul style="max-width: 230px;">
                             <li @click=ctype(item.Type) class="mx-2 d-inline" :title="item.Type"
-                            :class="TypeActive==index?'mx-2 d-inline iclick':'mx-2 d-inline'"
-                                v-for="item,index in animeType">
+                                :class="TypeActive == index ? 'mx-2 d-inline iclick' : 'mx-2 d-inline'"
+                                v-for="item, index in animeType">
                                 {{ item.Type }}
                             </li>
                         </ul>
@@ -56,7 +56,8 @@
 import Navigation from '../components/Navigation/index.vue'
 import Footer from '../components/Footer/index.vue'
 import Carousel from '../components/Carousel/index.vue'
-import { reactive, ref } from 'vue';
+import Bus from '../Bus';
+import { onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const domain = ref('')
@@ -65,6 +66,13 @@ let animeList = ref([])
 const LanguageActive = ref(0)
 const TypeActive = ref(0)
 const StatsActive = ref(0)
+onMounted(() => {
+    Bus.on('SearchAnime', (param: String) => {
+        fetch(`http://localhost:1314/api/anime/GetAnimeByFuzzyQuery/${param}`).then(res => res.json()).then(data => {
+            animeList.value = data
+        })
+    })
+})
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAllAnimes`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
@@ -192,22 +200,22 @@ const Filter = () => {
             'Content-Type': 'application/json'
         }),
         body: JSON.stringify(currentFilter)
-    }).then(res=>res.json()).then(data=>{
+    }).then(res => res.json()).then(data => {
         animeList.value = data
     })
 }
 const clanguage = (name: string) => {
-    LanguageActive.value=animeLanguage.filter(e=>e.LanguageName==name)[0].LanguageID
+    LanguageActive.value = animeLanguage.filter(e => e.LanguageName == name)[0].LanguageID
     currentFilter.AnimeLanguage = name
     Filter()
 }
 const cstats = (name: string) => {
-    StatsActive.value=animeStats.filter(e=>e.StatsName==name)[0].StatsID
+    StatsActive.value = animeStats.filter(e => e.StatsName == name)[0].StatsID
     currentFilter.AnimeStats = name
     Filter()
 }
 const ctype = (name: string) => {
-    TypeActive.value=animeType.filter(e=>e.Type==name)[0].TypeID
+    TypeActive.value = animeType.filter(e => e.Type == name)[0].TypeID
     currentFilter.AnimeType = name
     Filter()
 }
@@ -253,10 +261,12 @@ const ctype = (name: string) => {
     top: 3px;
     left: 0;
 }
-.filter li{
+
+.filter li {
     cursor: pointer;
 }
-.iclick{
+
+.iclick {
     color: #ff4c4c;
     font-weight: bolder;
     font-size: 18px;
