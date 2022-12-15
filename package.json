@@ -13,6 +13,7 @@
     "bootstrap": "^5.2.3",
     "gsap": "^3.11.3",
     "video.js": "^7.20.3",
+    "vite-plugin-compression": "^0.5.1",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },
