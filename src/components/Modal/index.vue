@@ -25,6 +25,9 @@ onUnmounted(() => {
 })
 onMounted(() => {
     let modal = new Modal('#LoginStats')
+    document.querySelector('#LoginStats')?.addEventListener('hidden.bs.modal',()=>{
+        document.querySelector('.modal-body')!.innerHTML = ''
+    })
     Bus.on('shownews', (news: string) => {
         document.querySelector('.modal-body')!.innerHTML = news
         modal.show()
