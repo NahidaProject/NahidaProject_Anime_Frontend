@@ -18,7 +18,7 @@
                             </router-link>
                         </li>
                     </ul>
-                    <div class="me-auto d-flex" v-if="currentPage.page=='animes'">
+                    <div class="me-auto d-flex" v-if="currentPage.page == 'animes'">
                         <input class="form-control me-2" placeholder="你想找什么视频..." v-model="searchValue">
                         <button class="btn btn-outline-primary" @click="search">Q</button>
                     </div>
@@ -27,8 +27,9 @@
                             <router-link class="router-link" to="login" v-if="UserName == ''">
                                 <a class="nav-link" aria-current="page">登录</a>
                             </router-link>
-                            <div v-else>
+                            <div v-else class="d-flex align-items-center justify-content-between">
                                 <a class="nav-link" aria-current="page">{{ UserName }}</a>
+                                <a class="nav-link" style="cursor: pointer;" @click="cleanCookies">退出登录</a>
                             </div>
                         </li>
                     </ul>
@@ -88,11 +89,20 @@ const enter = (element: HTMLElement) => {
 
 const search = () => {
     if (searchValue.value) {
-        Bus.emit('SearchAnime',searchValue.value)
+        Bus.emit('SearchAnime', searchValue.value)
     } else {
         Bus.emit('showmessage', {
             title: '(lll￢ω￢)',
             message: '阁下认真的吗?'
+        })
+    }
+}
+
+const cleanCookies = () => {
+    if (document.cookie.match(/[^ =;]+(?=\=)/g)) {
+        document.cookie.match(/[^ =;]+(?=\=)/g)!.forEach((el, index) => {
+            document.cookie = document.cookie.match(/[^ =;]+(?=\=)/g)![index] + "=0; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"
+            window.location.reload()
         })
     }
 }
