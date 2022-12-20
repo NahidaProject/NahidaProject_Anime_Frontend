@@ -7,9 +7,10 @@
                 <div class="shown w-75">
                     <div class="mx-3 my-3" v-for="item in animeList">
                         <div class="card-img" @click="play(item['AnimeID'])"
+                        data-bs-toggle="tooltip" data-bs-placement="right" :title="'CV:'+item['CVName']"
                             :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + (item['AnimeID'] >= 10 ? '0000' + item['AnimeID'] : '00000' + item['AnimeID']) + '.png)' }">
                         </div>
-                        <div class="animename">{{ item['AnimeName'] }}</div>
+                        <div class="animename" data-bs-toggle="tooltip" data-bs-placement="right" :title="item['AnimeName']">{{ item['AnimeName'] }}</div>
                     </div>
                 </div>
                 <div class="filter w-25 d-none d-lg-block" style="min-width: 310px;">
@@ -78,6 +79,8 @@ fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACK
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
     port.value = import.meta.env.VITE_BACKEND_PORT
     animeList.value = data
+    console.log(animeList.value);
+    
 })
 
 const play = (animeid: number) => {
