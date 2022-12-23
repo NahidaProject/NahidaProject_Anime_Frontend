@@ -68,10 +68,10 @@ const pagesList = [
         title: '番剧',
         page: 'animes'
     },
-    // {
-    //     title: '论坛',
-    //     page: 'forum'
-    // }
+    {
+        title: '论坛',
+        page: 'forum'
+    }
 ]
 
 const beforeEnter = (element: HTMLElement) => {

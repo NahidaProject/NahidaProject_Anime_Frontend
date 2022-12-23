@@ -66,7 +66,7 @@ const login = () => {
                     message: '用户不存在或密码错误'
                 })
             } else {
-                router.push('/')
+                router.back()
             }
         })
     } else {
