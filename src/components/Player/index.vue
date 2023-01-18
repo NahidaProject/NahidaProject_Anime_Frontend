@@ -1,7 +1,7 @@
 <template>
     <div class="card-img p-5"
         :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + nowplayerid + '.png)' }">
-        <div class="container-fluid vdo">
+        <div class="vdo">
             <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true"
                 preload="auto"></video>
         </div>
@@ -13,7 +13,7 @@
                 </span>
             </div>
         </div>
-        <div class="commentarea container m-5">
+        <div class="commentarea">
             <textarea class="form-control" style="height: 100px;background-color: rgba(255, 255, 255, .9);"
                 placeholder="发一条有趣的评论..." v-model="comment"></textarea>
             <button @click="SendComment()" type="button" class="btn my-2 btn-danger">发送</button>
@@ -87,28 +87,23 @@ onMounted(() => {
 .card-img {
     background-position: top;
     background-size: cover;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    align-items: center;
 }
 
 .vdo {
     height: 60vh;
-    width: 75%;
+    margin: 0 auto;
 }
 
 .episode {
-    max-width: 180px;
+    margin: 0 auto;
 }
 
 .episode .list {
-    display: flex;
-    flex-wrap: wrap;
+    overflow: scroll;
+    white-space: nowrap;
     background-color: rgba(78, 56, 56, 0.616);
     padding: 20px;
-    align-items: center;
-    justify-content: space-between;
+    margin: 0 auto;
 }
 
 .episode span {
@@ -123,7 +118,7 @@ onMounted(() => {
 }
 
 .widget-title {
-    color: #333;
+    color: black;
     font-size: 1.1em;
     margin: -5px 0 20px;
     padding-left: 12px;
