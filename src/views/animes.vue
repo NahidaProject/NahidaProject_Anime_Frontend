@@ -4,7 +4,7 @@
         <div class="content">
             <Carousel class="my-3"></Carousel>
             <div class="select container-fluid d-flex flex-warp">
-                <div class="shown w-75">
+                <div class="shown">
                     <div class="mx-3 my-3" v-for="item in animeList">
                         <div class="card-img" @click="play(item['AnimeID'])"
                         data-bs-toggle="tooltip" data-bs-placement="right" :title="'CV:'+item['CVName']"
@@ -236,20 +236,22 @@ const ctype = (name: string) => {
 
 .shown {
     display: flex;
-    max-width: 75%;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
 .card-img {
-    width: 160px;
+    width: 20vw;
     height: 240px;
     background-size: cover;
     background-position: center;
+    max-width: 160px;
+    max-height: 240px;
 }
 
 .animename {
-    width: 160px;
+    width: 20vw;
+    max-width: 160px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis "...";
@@ -274,5 +276,11 @@ const ctype = (name: string) => {
     color: #ff4c4c;
     font-weight: bolder;
     font-size: 18px;
+}
+
+@media screen and (max-width:600px){
+    .card-img {
+        height: 20vh;
+    }
 }
 </style>
