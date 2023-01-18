@@ -78,9 +78,10 @@ onMounted(() => {
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAllAnimes`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
     port.value = import.meta.env.VITE_BACKEND_PORT
+    data.sort((a: { AnimeReleaseDate: string; },b: { AnimeReleaseDate: string; })=>{
+        return new Date(b.AnimeReleaseDate).getTime()-new Date(a.AnimeReleaseDate).getTime()
+    })
     animeList.value = data
-    console.log(animeList.value);
-    
 })
 
 const play = (animeid: number) => {
