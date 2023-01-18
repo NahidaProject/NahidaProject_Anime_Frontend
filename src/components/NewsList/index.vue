@@ -11,7 +11,7 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h5 class="card-text " style="cursor: pointer;" @click="GetInformation(item.NewsID)"><strong>{{
+                        <h5 class="card-text title-text" style="cursor: pointer;" @click="GetInformation(item.NewsID)"><strong>{{
                                 item.NewsTitle
                         }}</strong>
                         </h5>
@@ -64,7 +64,7 @@ const GetInformation = async (NewsID: Number) => {
 .widget-title {
     color: #333;
     font-size: 1.1em;
-    margin: -5px 0 20px;
+    margin: 5px 0 20px;
     padding-left: 12px;
     position: relative;
 }
@@ -84,5 +84,11 @@ const GetInformation = async (NewsID: Number) => {
     background-size: cover;
     background-position: top;
     cursor: pointer;
+}
+
+@media screen and (max-width:600px){
+    .title-text{
+        font-size: 90%;
+    }
 }
 </style>
