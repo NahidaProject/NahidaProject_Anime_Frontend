@@ -282,5 +282,10 @@ const ctype = (name: string) => {
     .card-img {
         height: 20vh;
     }
+
+    .animename {
+        overflow: scroll;
+        font-size: small;
+    }
 }
 </style>
