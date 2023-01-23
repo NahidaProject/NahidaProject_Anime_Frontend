@@ -81,6 +81,34 @@ onMounted(() => {
     })
     document.querySelector('title')!.innerHTML = `第1集`
 })
+window.onkeydown = (e) => {
+    e.preventDefault();
+    const { key } = e;
+    const video = videojs(document.querySelector("#myVideo")!);
+    switch (key) {
+        case "w":
+            video.volume(video.volume() + 0.1);
+            break;
+        case "s":
+            video.volume(video.volume() - 0.1);
+            break;
+        case "a":
+            video.currentTime(video.currentTime() - 3);
+            break;
+        case "d":
+            video.currentTime(video.currentTime() + 3);
+            break;
+        case " ":
+            if (video.paused()) {
+                video.play();
+            } else {
+                video.pause();
+            }
+            break;
+        default:
+            break;
+    }
+};
 </script>
 
 <style scoped>
