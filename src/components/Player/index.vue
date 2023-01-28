@@ -63,8 +63,8 @@ const newepisode = (id: any) => {
     document.querySelector('title')!.innerHTML = `第${id}集`
 }
 const SendComment = () => {
-    Bus.emit('pushComment',{AnimeID:aid,CommentText:comment.value,UserName:''})
-    comment.value=null
+    Bus.emit('pushComment', { AnimeID: aid, CommentText: comment.value, UserName: '' })
+    comment.value = null
 }
 onMounted(() => {
     if (aid >= 10) {
@@ -74,41 +74,47 @@ onMounted(() => {
     }
     videojs(document.querySelector('#myVideo')!, {
         controls: true,
+        controlBar: {
+            fullscreenToggle: false
+        },
         sources: [{
             src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_001.mp4`,
         }
         ]
     })
     document.querySelector('title')!.innerHTML = `第1集`
+    document.querySelector('#myVideo')?.addEventListener('keydown', (e: any) => {
+        e.preventDefault();
+        const { key } = e;
+        const video = videojs(document.querySelector("#myVideo")!);
+        switch (key) {
+            case "ArrowUp":
+            case "w":
+                video.volume(video.volume() + 0.1);
+                break;
+            case "ArrowDown":
+            case "s":
+                video.volume(video.volume() - 0.1);
+                break;
+            case "ArrowLeft":
+            case "a":
+                video.currentTime(video.currentTime() - 3);
+                break;
+            case "ArrowRight":
+            case "d":
+                video.currentTime(video.currentTime() + 3);
+                break;
+            case " ":
+                video.paused() ? video.play() : video.pause();
+                break;
+            case 'Enter':
+                video.isFullscreen()?video.exitFullscreen():video.requestFullscreen()
+                break;
+            default:
+                break;
+        }
+    })
 })
-window.onkeydown = (e) => {
-    e.preventDefault();
-    const { key } = e;
-    const video = videojs(document.querySelector("#myVideo")!);
-    switch (key) {
-        case "w":
-            video.volume(video.volume() + 0.1);
-            break;
-        case "s":
-            video.volume(video.volume() - 0.1);
-            break;
-        case "a":
-            video.currentTime(video.currentTime() - 3);
-            break;
-        case "d":
-            video.currentTime(video.currentTime() + 3);
-            break;
-        case " ":
-            if (video.paused()) {
-                video.play();
-            } else {
-                video.pause();
-            }
-            break;
-        default:
-            break;
-    }
-};
 </script>
 
 <style scoped>
