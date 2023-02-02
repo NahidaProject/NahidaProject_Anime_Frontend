@@ -2,7 +2,6 @@
     <div class="container-fluid">
         <Navigation page="animes"></Navigation>
         <Video></Video>
-        <Footer></Footer>
     </div>
 </template>
 

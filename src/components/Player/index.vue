@@ -1,6 +1,5 @@
 <template>
-    <div class="card-img p-5"
-        :style="{ 'background-image': `url(http://${domain}:${port}/anime/main_image/` + nowplayerid + '.png)' }">
+    <div class="card-img p-5" :style="{ '--backgroundImage': backgroundImg }">
         <div class="vdo">
             <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true"
                 preload="auto"></video>
@@ -34,16 +33,18 @@ const aid = route.query.animeid as any
 const nowplayeranime = ref('')
 const domain = ref('')
 const port = ref('')
-
 const comment = ref()
+const nowplayerid = ref('')
+const backgroundImg = ref('')
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
     port.value = import.meta.env.VITE_BACKEND_PORT
     nowplayeranime.value = data['AnimeEpisode']
+    backgroundImg.value = `url(http://${domain.value}:${port.value}/anime/main_image/` + nowplayerid.value + '.png)'
+    console.log(backgroundImg.value);
 })
 
-const nowplayerid = ref('')
 const newepisode = (id: any) => {
     let currentEpisode
     if (id >= 10) {
@@ -108,7 +109,7 @@ onMounted(() => {
                 video.paused() ? video.play() : video.pause();
                 break;
             case 'Enter':
-                video.isFullscreen()?video.exitFullscreen():video.requestFullscreen()
+                video.isFullscreen() ? video.exitFullscreen() : video.requestFullscreen()
                 break;
             default:
                 break;
@@ -118,9 +119,18 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.card-img {
-    background-position: top;
+.card-img::before {
+    content: '';
+    position: absolute;
     background-size: cover;
+    background-position: top;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--backgroundImage);
+    filter: blur(5px) brightness(0.8);
+    z-index: -1;
 }
 
 .vdo {
@@ -135,7 +145,7 @@ onMounted(() => {
 .episode .list {
     overflow: scroll;
     white-space: nowrap;
-    background-color: rgba(78, 56, 56, 0.616);
+    /* background-color: rgba(78, 56, 56, 0.616); */
     padding: 20px;
     margin: 0 auto;
 }
@@ -152,7 +162,7 @@ onMounted(() => {
 }
 
 .widget-title {
-    color: black;
+    color: white;
     font-size: 1.1em;
     margin: -5px 0 20px;
     padding-left: 12px;
