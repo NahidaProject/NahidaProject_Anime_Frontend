@@ -7,7 +7,7 @@
         <div class="episode my-2">
             <h4 class="widget-title">剧集列表</h4>
             <div class="list">
-                <span v-for="index in nowplayeranime" @click="newepisode(index)">
+                <span v-for="index in nowplayeranime" @click="newepisode(parseInt(index))">
                     第{{ index }}集
                 </span>
             </div>
@@ -35,6 +35,7 @@ const domain = ref('')
 const port = ref('')
 const comment = ref()
 const nowplayerid = ref('')
+const nowplayerepisode = ref<number>()
 const backgroundImg = ref('')
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
@@ -42,10 +43,10 @@ fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACK
     port.value = import.meta.env.VITE_BACKEND_PORT
     nowplayeranime.value = data['AnimeEpisode']
     backgroundImg.value = `url(http://${domain.value}:${port.value}/anime/main_image/` + nowplayerid.value + '.png)'
-    console.log(backgroundImg.value);
 })
 
-const newepisode = (id: any) => {
+const newepisode = (id: number) => {
+    nowplayerepisode.value = id
     let currentEpisode
     if (id >= 10) {
         currentEpisode = `0${id}`
@@ -54,14 +55,24 @@ const newepisode = (id: any) => {
     }
     videojs(document.querySelector('#myVideo')!).dispose()
     document.querySelector('.vdo')!.innerHTML = '<video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true" preload="auto"></video>'
-    videojs(document.querySelector('#myVideo')!, {
+    const v = videojs(document.querySelector('#myVideo')!, {
         controls: true,
+        controlBar: {
+            fullscreenToggle: false
+        },
         sources: [{
             src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`,
-        }
-        ]
+        }]
+    }, () => {
+        document.querySelector('title')!.innerHTML = `第${id}集`
     })
-    document.querySelector('title')!.innerHTML = `第${id}集`
+    v.on('ended', () => {
+        if (nowplayerepisode.value !== parseInt(nowplayeranime.value)) {
+            newepisode(nowplayerepisode.value! + 1)
+        } else {
+            return
+        }
+    })
 }
 const SendComment = () => {
     Bus.emit('pushComment', { AnimeID: aid, CommentText: comment.value, UserName: '' })
@@ -73,18 +84,8 @@ onMounted(() => {
     } else {
         nowplayerid.value = '00000' + aid
     }
-    videojs(document.querySelector('#myVideo')!, {
-        controls: true,
-        controlBar: {
-            fullscreenToggle: false
-        },
-        sources: [{
-            src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_001.mp4`,
-        }
-        ]
-    })
-    document.querySelector('title')!.innerHTML = `第1集`
-    document.querySelector('#myVideo')?.addEventListener('keydown', (e: any) => {
+    newepisode(1)
+    window.addEventListener('keydown', (e: any) => {
         e.preventDefault();
         const { key } = e;
         const video = videojs(document.querySelector("#myVideo")!);
@@ -111,6 +112,19 @@ onMounted(() => {
             case 'Enter':
                 video.isFullscreen() ? video.exitFullscreen() : video.requestFullscreen()
                 break;
+            case 'n':
+                if (nowplayerepisode.value == 1) {
+                    break;
+                } else {
+                    newepisode(nowplayerepisode.value! - 1)
+                }
+                break;
+            case 'm':
+                if (nowplayerepisode.value == parseInt(nowplayeranime.value)) {
+                    break;
+                } else {
+                    newepisode(nowplayerepisode.value! + 1)
+                }
             default:
                 break;
         }
