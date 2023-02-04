@@ -1,8 +1,8 @@
 <template>
     <div class="card-img p-5" :style="{ '--backgroundImage': backgroundImg }">
         <div class="vdo">
-            <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true"
-                preload="auto"></video>
+            <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true" preload="auto"
+                :src="videoSource"></video>
         </div>
         <div class="episode my-2">
             <h4 class="widget-title">剧集列表</h4>
@@ -37,6 +37,7 @@ const comment = ref()
 const nowplayerid = ref('')
 const nowplayerepisode = ref<number>()
 const backgroundImg = ref('')
+const videoSource = ref()
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
@@ -53,26 +54,8 @@ const newepisode = (id: number) => {
     } else {
         currentEpisode = `00${id}`
     }
-    videojs(document.querySelector('#myVideo')!).dispose()
-    document.querySelector('.vdo')!.innerHTML = '<video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true" preload="auto"></video>'
-    const v = videojs(document.querySelector('#myVideo')!, {
-        controls: true,
-        controlBar: {
-            fullscreenToggle: false
-        },
-        sources: [{
-            src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`,
-        }]
-    }, () => {
-        document.querySelector('title')!.innerHTML = `第${id}集`
-    })
-    v.on('ended', () => {
-        if (nowplayerepisode.value !== parseInt(nowplayeranime.value)) {
-            newepisode(nowplayerepisode.value! + 1)
-        } else {
-            return
-        }
-    })
+    videoSource.value = `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`
+    document.querySelector('title')!.innerHTML = `第${id}集`
 }
 const SendComment = () => {
     Bus.emit('pushComment', { AnimeID: aid, CommentText: comment.value, UserName: '' })
@@ -85,6 +68,20 @@ onMounted(() => {
         nowplayerid.value = '00000' + aid
     }
     newepisode(1)
+    videojs(document.querySelector('#myVideo')!, {
+        controls: true,
+        controlBar: {
+            fullscreenToggle: false
+        }
+    }, function () {
+        this.on('ended', () => {
+            if (nowplayerepisode.value !== parseInt(nowplayeranime.value)) {
+                newepisode(nowplayerepisode.value! + 1)
+            } else {
+                return
+            }
+        })
+    })
     window.addEventListener('keydown', (e: any) => {
         e.preventDefault();
         const { key } = e;
