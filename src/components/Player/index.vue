@@ -1,13 +1,13 @@
 <template>
     <div class="card-img p-5" :style="{ '--backgroundImage': backgroundImg }">
         <div class="vdo">
-            <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true" preload="auto"
-                :src="videoSource"></video>
+            <video id="myVideo" class="h-100 container video-js vjs-big-play-centered" autoplay="true"
+                preload="auto"></video>
         </div>
         <div class="episode my-2">
             <h4 class="widget-title">剧集列表</h4>
             <div class="list">
-                <span v-for="index in nowplayeranime" @click="newepisode(parseInt(index))">
+                <span v-for="index in nowplayeranime" @click="newepisode(parseInt(index), vPlayer)">
                     第{{ index }}集
                 </span>
             </div>
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import 'video.js/dist/video-js.css'
-import videojs from 'video.js';
+import videojs, { VideoJsPlayer } from 'video.js';
 import { onMounted, ref } from 'vue';
 import Comments from '../Comments/index.vue'
 import Bus from '../../Bus'
@@ -37,7 +37,8 @@ const comment = ref()
 const nowplayerid = ref('')
 const nowplayerepisode = ref<number>()
 const backgroundImg = ref('')
-const videoSource = ref()
+const keyList = ['ArrowUp', 'w', 'ArrowDown', 's', 'ArrowLeft', 'a', 'ArrowRight', 'd', ' ', 'Enter', 'n', 'm']
+let vPlayer: VideoJsPlayer
 
 fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/api/anime/GetAnimeByID/${aid}`).then(res => res.json()).then(data => {
     domain.value = import.meta.env.VITE_BACKEND_DOMAIN
@@ -46,7 +47,7 @@ fetch(`http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACK
     backgroundImg.value = `url(http://${domain.value}:${port.value}/anime/main_image/` + nowplayerid.value + '.png)'
 })
 
-const newepisode = (id: number) => {
+const newepisode = (id: number, el?: VideoJsPlayer) => {
     nowplayerepisode.value = id
     let currentEpisode
     if (id >= 10) {
@@ -54,21 +55,23 @@ const newepisode = (id: number) => {
     } else {
         currentEpisode = `00${id}`
     }
-    videoSource.value = `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4`
     document.querySelector('title')!.innerHTML = `第${id}集`
+    el?.src({ src: `http://${import.meta.env.VITE_BACKEND_DOMAIN}:${import.meta.env.VITE_BACKEND_PORT}/anime/videos/${nowplayerid.value}/${nowplayerid.value}_${currentEpisode}.mp4` })
 }
+
 const SendComment = () => {
     Bus.emit('pushComment', { AnimeID: aid, CommentText: comment.value, UserName: '' })
     comment.value = null
 }
+
 onMounted(() => {
     if (aid >= 10) {
         nowplayerid.value = '0000' + aid
     } else {
         nowplayerid.value = '00000' + aid
     }
-    newepisode(1)
-    videojs(document.querySelector('#myVideo')!, {
+    // 初始化播放器
+    vPlayer = videojs(document.querySelector('#myVideo')!, {
         controls: true,
         controlBar: {
             fullscreenToggle: false
@@ -76,51 +79,56 @@ onMounted(() => {
     }, function () {
         this.on('ended', () => {
             if (nowplayerepisode.value !== parseInt(nowplayeranime.value)) {
-                newepisode(nowplayerepisode.value! + 1)
+                newepisode(nowplayerepisode.value! + 1, vPlayer)
             } else {
                 return
             }
         })
     })
+    // 页面初始化时为第一集
+    newepisode(1, vPlayer)
+    // 全局监听指定键位事件
     window.addEventListener('keydown', (e: any) => {
-        e.preventDefault();
         const { key } = e;
-        const video = videojs(document.querySelector("#myVideo")!);
+        keyList.map((k) => {
+            if (key == k)
+                e.preventDefault();
+        })
         switch (key) {
             case "ArrowUp":
             case "w":
-                video.volume(video.volume() + 0.1);
+                vPlayer.volume(vPlayer.volume() + 0.1);
                 break;
             case "ArrowDown":
             case "s":
-                video.volume(video.volume() - 0.1);
+                vPlayer.volume(vPlayer.volume() - 0.1);
                 break;
             case "ArrowLeft":
             case "a":
-                video.currentTime(video.currentTime() - 3);
+                vPlayer.currentTime(vPlayer.currentTime() - 3);
                 break;
             case "ArrowRight":
             case "d":
-                video.currentTime(video.currentTime() + 3);
+                vPlayer.currentTime(vPlayer.currentTime() + 3);
                 break;
             case " ":
-                video.paused() ? video.play() : video.pause();
+                vPlayer.paused() ? vPlayer.play() : vPlayer.pause();
                 break;
             case 'Enter':
-                video.isFullscreen() ? video.exitFullscreen() : video.requestFullscreen()
+                vPlayer.isFullscreen() ? vPlayer.exitFullscreen() : vPlayer.requestFullscreen()
                 break;
             case 'n':
                 if (nowplayerepisode.value == 1) {
                     break;
                 } else {
-                    newepisode(nowplayerepisode.value! - 1)
+                    newepisode(nowplayerepisode.value! - 1, vPlayer)
                 }
                 break;
             case 'm':
                 if (nowplayerepisode.value == parseInt(nowplayeranime.value)) {
                     break;
                 } else {
-                    newepisode(nowplayerepisode.value! + 1)
+                    newepisode(nowplayerepisode.value! + 1, vPlayer)
                 }
             default:
                 break;
