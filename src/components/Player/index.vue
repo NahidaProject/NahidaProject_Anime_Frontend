@@ -162,7 +162,7 @@ onMounted(() => {
 }
 
 .episode .list {
-    overflow: scroll;
+    overflow: overlay;
     white-space: nowrap;
     /* background-color: rgba(78, 56, 56, 0.616); */
     padding: 20px;
